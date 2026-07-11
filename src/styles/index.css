@@ -892,7 +892,7 @@ body.nav-open {
   font-size: .72rem;
   font-weight: 500;
   letter-spacing: .22em;
-  text-transform: uppercase;
+  letter-spacing: .25em;
   color: var(--gold);
   margin-bottom: 18px;
 }
@@ -900,7 +900,7 @@ body.nav-open {
 #hero h1 {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-size: clamp(3.5rem, 8vw, 6rem);
   line-height: 1.02;
   letter-spacing: -.03em;
   color: var(--white);
@@ -958,6 +958,8 @@ body.nav-open {
 #typing {
   color: var(--gold);
   font-weight: 400;
+  display: block;
+  min-height: 1.7em;
   display: block;
   min-height: 1.7em;
 }
@@ -2253,4 +2255,48 @@ footer span {
   .tl-item::before {
     left: -28px;
   }
+}
+
+/* Navbar enhancements */
+nav a {
+  position: relative;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color .3s ease, text-shadow .3s ease;
+  padding: 4px 0;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1.5px;
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+  transition: width .3s cubic-bezier(.4, 0, .2, 1);
+}
+
+nav a:hover,
+nav a.active {
+  color: var(--gold);
+  text-shadow: 0 0 12px rgba(232, 217, 184, .3);
+}
+
+nav a:hover::after,
+nav a.active::after {
+  width: 100%;
+}
+
+/* Header glass enhancement */
+header {
+  border-bottom: 1px solid var(--border);
+  background: var(--header-bg);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
 }

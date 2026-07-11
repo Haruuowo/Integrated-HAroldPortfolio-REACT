@@ -38,8 +38,7 @@ export default function Contact() {
     }
 
     const sub = encodeURIComponent((subject || 'Portfolio Contact') + ' — from ' + name)
-
-const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`)
     window.location.href = 'mailto:harolddoton@gmail.com?subject=' + sub + '&body=' + body
 
     setFormStatus('Opening your mail app...')

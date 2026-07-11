@@ -68,7 +68,7 @@ export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpe
           e.preventDefault()
           document.querySelector('#hero')?.scrollIntoView({ behavior: 'smooth' })
         }}>
-          <img src="./assets/my-notion-face-transparent.png" alt="John Harold Doton Logo" />
+          <img src="/assets/my-notion-face-transparent.png" alt="John Harold Doton Logo" />
         </a>
       </div>
 

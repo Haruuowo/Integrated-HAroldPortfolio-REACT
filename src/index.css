@@ -369,3 +369,18 @@ footer span { font-size: .75rem; color: var(--darker); letter-spacing: .04em; tr
   .project-featured-title { font-size: 1.5rem; }
   .project-featured-desc { font-size: .88rem; }
 }
+css
+#hero {
+  --glitch-intensity: 1;
+}
+#hero {
+  --glitch-speed: 1;
+}
+
+#hero:hover::before {
+  animation-duration: calc(9s / var(--glitch-speed)), calc(0.35s / var(--glitch-speed));
+}
+
+#hero:hover > div {
+  animation-duration: calc(0.35s / var(--glitch-speed));
+}
