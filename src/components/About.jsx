@@ -1,86 +1,104 @@
 import { useEffect, useRef, useState } from 'react'
+import gsap from 'gsap'
+import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
+
+gsap.registerPlugin(ScrambleTextPlugin)
 
 const TAGS = ['Software Engineering', 'AI/ML Engineer', 'Frontend Developer', 'Backend Developer']
 
-const TYPED_SEGMENTS = [
-  { text: "HI! im Harold, I'm a Computer Science student at Holy Angel University, focused on ", bold: true },
-  { text: "artificial intelligence, software engineering", bold: true },
-  { text: ", and building things people actually use. I like turning ideas AI tools, clean interfaces, I occasionally like creating silly projects that i could turn into real working code.", bold: true },
-]
+const FULL_TEXT = "HI! im Harold, I'm a Computer Science student at Holy Angel University, focused on artificial intelligence, software engineering, and building things people actually use. I like turning ideas AI tools, clean interfaces, I occasionally like creating silly projects that i could turn into real working code."
 
 export default function About() {
-  const wrapRef = useRef(null)
-  const [typedHtml, setTypedHtml] = useState('')
-  const [showCursor, setShowCursor] = useState(true)
+  const sectionRef = useRef(null)
+  const avatarRef = useRef(null)
+  const textRef = useRef(null)
+  const headingRef = useRef(null)
+  const tagsRef = useRef(null)
   const [tagsVisible, setTagsVisible] = useState(false)
-  const [visible, setVisible] = useState(false)
+  const hasAnimated = useRef(false)
 
   useEffect(() => {
-    const el = wrapRef.current
-    if (!el) return
+    const section = sectionRef.current
+    const avatar = avatarRef.current
+    const text = textRef.current
+    const heading = headingRef.current
+    if (!section || !avatar || !text || !heading) return
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisible(true)
-            typeAbout()
+          if (entry.isIntersecting && !hasAnimated.current) {
+            hasAnimated.current = true
+
+            gsap.from(avatar, {
+              x: -80,
+              opacity: 0,
+              scale: 0.85,
+              duration: 1.2,
+              ease: 'power3.out',
+            })
+
+            gsap.from(text, {
+              x: 80,
+              opacity: 0,
+              duration: 1.2,
+              ease: 'power3.out',
+              delay: 0.2,
+            })
+
+            // ScrambleText — start from empty string, reveal to full text
+            gsap.fromTo(heading, 
+              { scrambleText: { text: "" } },
+              {
+                duration: 2.5,
+                scrambleText: {
+                  text: FULL_TEXT,
+                  chars: "lowerCase", // only lowercase — much narrower
+                  revealDelay: 0.3,
+                  speed: 0.6,
+                },
+                ease: "none",
+                delay: 0.5,
+                onStart: () => {
+                  heading.classList.add('scrambling');
+                },
+                onComplete: () => {
+                  heading.classList.remove('scrambling');
+                  setTagsVisible(true);
+                }
+              }
+            )
+
+            if (tagsRef.current) {
+              gsap.from(tagsRef.current.children, {
+                y: 20,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.1,
+                ease: 'power3.out',
+                delay: 3,
+              })
+            }
+
             observer.disconnect()
           }
         })
       },
-      { threshold: 0.4 }
+      { threshold: 0.2 }
     )
-    observer.observe(el)
+
+    observer.observe(section)
     return () => observer.disconnect()
   }, [])
 
-  const typeAbout = () => {
-    let segIndex = 0
-    let charIndex = 0
-    let currentHtml = ''
-    let inBold = false
-
-    const step = () => {
-      if (segIndex >= TYPED_SEGMENTS.length) {
-        setTimeout(() => {
-          setShowCursor(false)
-          setTagsVisible(true)
-        }, 500)
-        return
-      }
-      const seg = TYPED_SEGMENTS[segIndex]
-      if (charIndex < seg.text.length) {
-        const ch = seg.text[charIndex]
-        if (seg.bold && !inBold) {
-          currentHtml += '<strong>'
-          inBold = true
-        }
-        currentHtml += ch
-        setTypedHtml(currentHtml + (inBold ? '</strong>' : ''))
-        charIndex++
-        setTimeout(step, 7 + Math.random() * 10)
-      } else {
-        if (inBold) {
-          currentHtml += '</strong>'
-          inBold = false
-        }
-        segIndex++
-        charIndex = 0
-        setTimeout(step, 30)
-      }
-    }
-    step()
-  }
-
   return (
-    <section id="about">
+    <section id="about" ref={sectionRef}>
       <div className="container">
         <div className="sec-head">
           <h2 className="sec-title">About</h2>
         </div>
-        <div className={`about-grid reveal ${visible ? 'visible' : ''}`}>
-          <div className="avatar">
+        <div className="about-grid">
+          <div className="avatar" ref={avatarRef}>
             <img
               src="/assets/HAROLDPHOTO1.jpg"
               alt="John Harold Doton"
@@ -90,22 +108,19 @@ export default function About() {
               }}
             />
           </div>
-          <div className="about-body">
-            <p className="about-typed-wrap" ref={wrapRef}>
-              <span className="sr-only">
-                HI! im Harold, I'm a Computer Science student at Holy Angel University, focused on
-                artificial intelligence, software engineering, and building things people actually use.
-                I like turning ideas AI tools, clean interfaces, I occasionally like creating silly
-                projects that i could turn into real working code.
-              </span>
+          <div className="about-body" ref={textRef}>
+            <p className="about-typed-wrap">
+              <span className="sr-only">{FULL_TEXT}</span>
               <span
-                id="aboutTyped"
+                ref={headingRef}
                 className="about-typed"
                 aria-hidden="true"
-                dangerouslySetInnerHTML={{ __html: typedHtml + (showCursor ? '<span class="type-cursor"></span>' : '') }}
-              />
+                style={{ display: 'inline-block', minHeight: '1.5em', color: '#fff' }}
+              >
+                {FULL_TEXT}
+              </span>
             </p>
-            <div className={`tagstrip ${tagsVisible ? 'stagger-in' : ''}`}>
+            <div className={`tagstrip ${tagsVisible ? 'stagger-in' : ''}`} ref={tagsRef}>
               {TAGS.map((tag) => (
                 <span key={tag} className="tag">{tag}</span>
               ))}

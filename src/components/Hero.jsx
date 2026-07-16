@@ -1,204 +1,110 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
 
 const WORDS = ['Software Engineer', 'Full Stack Developer', 'AI/ML Engineer', 'Mobile App Developer']
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*'
 
-/* ============================================================
-   MAGNETIC BUTTON COMPONENT
-   ============================================================ */
-function MagneticButton({ children, className, as: Tag = 'button', ...props }) {
-  const btnRef = useRef(null)
-
-  const handleMove = (e) => {
-    const btn = btnRef.current
-    if (!btn) return
-    const rect = btn.getBoundingClientRect()
-    const x = e.clientX - rect.left - rect.width / 2
-    const y = e.clientY - rect.top - rect.height / 2
-
-    gsap.to(btn, {
-      x: x * 0.35,
-      y: y * 0.35,
-      duration: 0.3,
-      ease: 'power2.out',
-    })
-  }
-
-  const handleLeave = () => {
-    gsap.to(btnRef.current, {
-      x: 0,
-      y: 0,
-      duration: 0.6,
-      ease: 'elastic.out(1, 0.4)',
-    })
-  }
-
-  return (
-    <Tag
-      ref={btnRef}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      className={className}
-      {...props}
-    >
-      {children}
-    </Tag>
-  )
+// #region agent log
+let _heroEffectInstance = 0
+const _dbg = (location, message, data, hypothesisId) => {
+  fetch('http://127.0.0.1:7690/ingest/67716fa6-5a36-491e-8f79-4850ffe8f44f', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '5435af' }, body: JSON.stringify({ sessionId: '5435af', location, message, data, hypothesisId, timestamp: Date.now(), runId: 'pre-fix' }) }).catch(() => {})
 }
+// #endregion
 
-/* ============================================================
-   SMOOTH TYPEWRITER UTIL (GSAP-powered, sequential)
-   ============================================================ */
-function typeWriter(element, text, duration = 1.0) {
-  if (!element) return Promise.resolve()
-  const chars = text.split('')
-  element.textContent = ''
-
-  return new Promise((resolve) => {
-    const tl = gsap.timeline({
-      onComplete: resolve,
-    })
-
-    chars.forEach((char, i) => {
-      tl.call(() => {
-        element.textContent += char
-      }, [], i * (duration / chars.length))
-    })
-  })
-}
-
-/* ============================================================
-   SMOOTH SCRAMBLE UTIL (GSAP-powered)
-   ============================================================ */
-function scrambleText(element, finalText, duration = 0.7) {
-  if (!element) return
-  const chars = SCRAMBLE_CHARS
-  const obj = { progress: 0 }
-
-  gsap.to(obj, {
-    progress: 1,
-    duration: duration,
-    ease: 'power2.inOut',
-    onUpdate: () => {
-      const revealedCount = Math.floor(obj.progress * finalText.length)
-      let output = ''
-      for (let i = 0; i < finalText.length; i++) {
-        if (i < revealedCount) {
-          output += finalText[i]
-        } else if (finalText[i] === ' ') {
-          output += ' '
-        } else {
-          output += chars[Math.floor(Math.random() * chars.length)]
-        }
-      }
-      element.textContent = output
-    },
-    onComplete: () => {
-      element.textContent = finalText
-    },
-  })
-}
-
-/* ============================================================
-   HERO COMPONENT
-   ============================================================ */
 export default function Hero() {
   const heroRef = useRef(null)
-  const heroContentRef = useRef(null)
-  const nameLine1Ref = useRef(null)
-  const nameLine2Ref = useRef(null)
-  const typingRef = useRef(null)
-  const cursorRef = useRef(null)
+  const [nameLine1, setNameLine1] = useState('')
+  const [nameLine2, setNameLine2] = useState('')
+  const [showCursor, setShowCursor] = useState(true)
   const [nameDone, setNameDone] = useState(false)
   const [typedWord, setTypedWord] = useState('')
   const [wordIndex, setWordIndex] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
-  const [showCursor, setShowCursor] = useState(true)
 
-  /* ---------- GSAP: HERO ENTRANCE SEQUENCE ---------- */
+  // Hero name type-in effect
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.5 })
+    const nameLines = ['John Harold', 'Doton']
+    let lineIdx = 0
+    let charIdx = 0
+    let cancelled = false
+    const timers = []
+    const instanceId = ++_heroEffectInstance
 
-      // 1. Hero tag fades up
-      tl.from('.hero-tag', {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power3.out',
-      })
-      // 2. Name line 1: type-in (waits for completion)
-      .add(() => typeWriter(nameLine1Ref.current, 'John Harold', 1.0))
-      // 3. Name line 2: type-in (starts after line 1 finishes)
-      .add(() => typeWriter(nameLine2Ref.current, 'Doton', 0.7))
-      // 4. Cursor appears with bounce
-      .from(cursorRef.current, {
-        opacity: 0,
-        scaleY: 0,
-        duration: 0.3,
-        ease: 'back.out(2)',
-      })
-      // 5. Subtitle lines stagger in
-      .from('.hero-sub', {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'power3.out',
-      }, '-=0.2')
-      // 6. Buttons fade in
-      .from('.hero-row', {
-        y: 20,
-        opacity: 0,
-        duration: 0.6,
-        ease: 'power3.out',
-      }, '-=0.4')
-      // 7. Mark as done
-      .add(() => setNameDone(true), '+=0.2')
+    // #region agent log
+    _dbg('Hero.jsx:type-in-effect', 'effect mounted', { instanceId, nameLines }, 'H-A')
+    // #endregion
 
-    }, heroContentRef)
+    const step = () => {
+      if (cancelled) {
+        // #region agent log
+        _dbg('Hero.jsx:step', 'step skipped (cancelled)', { instanceId, lineIdx, charIdx }, 'H-A')
+        // #endregion
+        return
+      }
+      if (lineIdx >= nameLines.length) {
+        timers.push(setTimeout(() => {
+          if (cancelled) return
+          // #region agent log
+          _dbg('Hero.jsx:step', 'type-in complete', { instanceId }, 'H-D')
+          // #endregion
+          setShowCursor(false)
+          setNameDone(true)
+        }, 600))
+        return
+      }
+      const line = nameLines[lineIdx]
+      if (charIdx < line.length) {
+        const char = line[charIdx]
+        // #region agent log
+        _dbg('Hero.jsx:step', 'append char', { instanceId, lineIdx, charIdx, char, charIsUndefined: char === undefined, line, lineIsUndefined: line === undefined }, 'H-B')
+        // #endregion
+        if (lineIdx === 0) {
+          setNameLine1(prev => {
+            const next = prev + char
+            // #region agent log
+            _dbg('Hero.jsx:setNameLine1', 'state update', { instanceId, prev, char, next, charIsUndefined: char === undefined }, 'H-E')
+            // #endregion
+            return next
+          })
+        } else {
+          setNameLine2(prev => {
+            const next = prev + char
+            // #region agent log
+            _dbg('Hero.jsx:setNameLine2', 'state update', { instanceId, prev, char, next, charIsUndefined: char === undefined }, 'H-E')
+            // #endregion
+            return next
+          })
+        }
+        charIdx++
+        timers.push(setTimeout(step, 55 + Math.random() * 40))
+      } else {
+        // #region agent log
+        _dbg('Hero.jsx:step', 'line transition', { instanceId, fromLineIdx: lineIdx, nextLine: nameLines[lineIdx + 1], nextLineIsUndefined: nameLines[lineIdx + 1] === undefined }, 'H-C')
+        // #endregion
+        lineIdx++
+        charIdx = 0
+        timers.push(setTimeout(step, 220))
+      }
+    }
 
-    return () => ctx.revert()
+    timers.push(setTimeout(step, 550))
+    return () => {
+      cancelled = true
+      timers.forEach(clearTimeout)
+      // #region agent log
+      _dbg('Hero.jsx:type-in-effect', 'effect cleanup', { instanceId, timersCleared: timers.length }, 'H-A')
+      // #endregion
+    }
   }, [])
 
-  /* ---------- GSAP: CURSOR BLINK ---------- */
+  // #region agent log
   useEffect(() => {
-    if (!cursorRef.current || !showCursor) return
-    const ctx = gsap.context(() => {
-      gsap.to(cursorRef.current, {
-        opacity: 0.2,
-        duration: 0.6,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut',
-      })
-    })
-    return () => ctx.revert()
-  }, [showCursor])
+    if (nameLine1.includes('undefined') || nameLine2.includes('undefined') || (nameDone && nameLine1 !== 'John Harold')) {
+      _dbg('Hero.jsx:render-state', 'suspicious name state', { nameLine1, nameLine2, nameDone }, 'H-D')
+    }
+  }, [nameLine1, nameLine2, nameDone])
+  // #endregion
 
-  /* ---------- GSAP: PARALLAX BACKGROUND ON SCROLL ---------- */
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.to('#hero', {
-        backgroundPosition: 'center 30%',
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '#hero',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: true,
-        },
-      })
-    })
-    return () => ctx.revert()
-  }, [])
-
-  /* ---------- TYPING EFFECT FOR ROLE WORDS ---------- */
+  // Typing effect for role words
   useEffect(() => {
     const w = WORDS[wordIndex]
     const delay = isDeleting ? 45 : 95
@@ -222,7 +128,14 @@ export default function Hero() {
     return () => clearTimeout(timer)
   }, [charIndex, isDeleting, wordIndex])
 
-  /* ---------- VHS GLITCH EFFECT ---------- */
+  // Clean up scramble on unmount
+  useEffect(() => {
+    return () => {
+      if (scrambleRef.current) clearInterval(scrambleRef.current)
+    }
+  }, [])
+
+  // VHS glitch effect
   useEffect(() => {
     const hero = heroRef.current
     if (!hero) return
@@ -241,72 +154,67 @@ export default function Hero() {
     return () => clearTimeout(glitchTimer)
   }, [])
 
-  /* ---------- CLICK TO RE-SCRAMBLE ---------- */
+  const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*'
+
+  const scrambleRef = useRef(null)
+
+  const scramble = useCallback((setter, original) => {
+    if (scrambleRef.current) {
+      clearInterval(scrambleRef.current)
+    }
+    let iterations = 0
+    scrambleRef.current = setInterval(() => {
+      setter(
+        original
+          .split('')
+          .map((char, i) =>
+            i < Math.floor(iterations)
+              ? original[i]
+              : scrambleChars[Math.floor(Math.random() * scrambleChars.length)]
+          )
+          .join('')
+      )
+      if (Math.floor(iterations) >= original.length) {
+        clearInterval(scrambleRef.current)
+        scrambleRef.current = null
+        setter(original)
+      }
+      iterations += 1 / 3
+    }, 30)
+  }, [])
+
   const handleNameClick = useCallback(() => {
     if (!nameDone) return
-    scrambleText(nameLine1Ref.current, 'John Harold', 0.6)
-    scrambleText(nameLine2Ref.current, 'Doton', 0.5)
-  }, [nameDone])
+    // #region agent log
+    _dbg('Hero.jsx:handleNameClick', 'scramble triggered', { nameLine1, nameLine2 }, 'H-D')
+    // #endregion
+    scramble(setNameLine1, 'John Harold')
+    scramble(setNameLine2, 'Doton')
+  }, [nameDone, scramble, nameLine1, nameLine2])
 
   return (
     <section id="hero" ref={heroRef}>
-      <div ref={heroContentRef}>
+      <div>
         <p className="hero-tag">Portfolio · 2026</p>
         <h1 id="heroName" className={nameDone ? 'name-flicker' : ''}>
           <span className="sr-only">John Harold Doton</span>
           <span aria-hidden="true">
-            <span
-              id="heroNameLine1"
-              ref={nameLine1Ref}
-              onClick={handleNameClick}
-              style={{ cursor: nameDone ? 'pointer' : 'default' }}
-            />
+            <span id="heroNameLine1" onClick={handleNameClick}>{nameLine1}</span>
             <br />
-            <span
-              id="heroNameLine2"
-              ref={nameLine2Ref}
-              onClick={handleNameClick}
-              style={{ cursor: nameDone ? 'pointer' : 'default' }}
-            />
-            {showCursor && (
-              <span
-                ref={cursorRef}
-                className="type-cursor"
-                style={{ display: 'inline-block' }}
-              />
-            )}
+            <span id="heroNameLine2" onClick={handleNameClick}>{nameLine2}</span>
           </span>
+          {showCursor && <span className="type-cursor" style={{ marginLeft: '4px' }} />}
         </h1>
-        <p className="hero-sub">
-          <span id="typing" ref={typingRef}>{typedWord}</span>
-        </p>
+        <p className="hero-sub"><span id="typing">{typedWord}</span></p>
         <p className="hero-sub" style={{ marginTop: '12px' }}>
           Building modern web applications and creative digital experiences.
         </p>
         <div className="hero-row">
-          <MagneticButton
-            as="a"
-            href="#work"
-            className="btn-solid"
-            onClick={(e) => {
-              e.preventDefault()
-              gsap.to(window, {
-                duration: 1.2,
-                scrollTo: { y: '#work', offsetY: 70 },
-                ease: 'power3.inOut',
-              })
-            }}
-          >
-            View projects
-          </MagneticButton>
-          <MagneticButton
-            as="a"
-            href="/assets/resume.pdf"
-            className="btn-line"
-            download
-          >
-            Resume
-          </MagneticButton>
+          <a href="#work" className="btn-solid" onClick={(e) => {
+            e.preventDefault()
+            document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' })
+          }}>View projects</a>
+          <a href="/assets/resume.pdf" className="btn-line" download>Resume</a>
         </div>
       </div>
     </section>
