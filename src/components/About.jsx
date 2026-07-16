@@ -110,12 +110,13 @@ export default function About() {
           </div>
           <div className="about-body" ref={textRef}>
             <p className="about-typed-wrap">
-              <span className="sr-only">{FULL_TEXT}</span>
+              <span className="about-typed-ghost" aria-hidden="true">
+                {FULL_TEXT}
+              </span>
               <span
                 ref={headingRef}
-                className="about-typed"
+                className="about-typed animate-text"
                 aria-hidden="true"
-                style={{ display: 'inline-block', minHeight: '1.5em', color: '#fff' }}
               >
                 {FULL_TEXT}
               </span>

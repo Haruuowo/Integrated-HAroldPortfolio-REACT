@@ -1128,7 +1128,33 @@ section {
 }
 
 .about-typed-wrap {
-  min-height: 6.5em;
+  position: relative;
+  width: 100%;
+}
+
+.about-typed-ghost {
+  display: block;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 1.02rem;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  line-height: 1.7;
+}
+
+.about-typed.animate-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  color: var(--white);
+  line-height: 1.7;
 }
 
 .type-cursor {
@@ -1206,119 +1232,512 @@ section {
   color: var(--gold);
 }
 
-/* ---------- SKILLS ---------- */
-.skills-cols {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
+/* ---------- SKILLS – 3D SPHERE CLOUD ---------- */
+
+/* Outer scene: sets perspective and grab cursor */
+.sphere-scene {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  overflow: visible;
 }
 
-.skills-col {
-  padding: 0 44px 0 0;
+/* Centred stage that all pill cards are positioned within */
+.sphere-stage {
+  position: absolute;
+  inset: 0;
+  perspective: 900px;
+  perspective-origin: center center;
+  transform-style: preserve-3d;
 }
 
-.skills-col:last-child {
-  padding: 0 0 0 44px;
-  border-left: 1px solid var(--border);
-}
-
-.col-label {
-  font-size: .68rem;
-  font-weight: 500;
-  letter-spacing: .2em;
-  text-transform: uppercase;
-  color: var(--darker);
-  margin-bottom: 24px;
-  display: block;
-  transition: color .4s;
-}
-
-.skill-flow {
+/* Individual skill pill floating in the sphere */
+.sphere-pill {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.skill {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 9px;
-  width: 84px;
-  padding: 16px 8px 12px;
-  border: 1px solid var(--border);
-  background: var(--skill-bg);
-  transition: border-color .2s, background .4s, transform .2s;
+  gap: 8px;
+  padding: 9px 16px 9px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  white-space: nowrap;
+  pointer-events: auto;
+  transition: border-color .25s, background .25s, box-shadow .25s;
+  will-change: transform, opacity;
+}
+
+.sphere-pill:hover {
+  border-color: var(--gold);
+  background: rgba(212, 175, 55, 0.10);
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.25);
   cursor: default;
 }
 
-.skill:hover {
-  border-color: var(--bdgold);
-  transform: translateY(-3px);
-}
-
-.skill-icon {
-  width: 28px;
-  height: 28px;
+.sphere-pill img {
+  width: 22px;
+  height: 22px;
   object-fit: contain;
   flex-shrink: 0;
+  display: block;
+  pointer-events: none;
 }
 
-/* Pixelate-resolve entrance for skill cards */
-@keyframes skillFallbackReveal {
-  to {
-    opacity: 1;
-    filter: blur(0) contrast(1);
-    transform: scale(1);
-  }
+.sphere-pill span {
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  color: var(--muted);
+  transition: color .25s;
 }
 
-.skills-cols:not(.pixelate-in) .skill {
-  opacity: 0;
-  transform: scale(1.15);
-  filter: blur(8px) contrast(2);
-  animation: skillFallbackReveal 0s linear 4s forwards;
-}
-
-.skills-cols.pixelate-in .skill {
-  opacity: 1;
-  filter: blur(0) contrast(1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skills-cols .skill {
-    opacity: 1;
-    transform: none;
-    filter: none;
-    animation: none;
-  }
-}
-
-.skill-icon-svg {
+.sphere-pill:hover span {
   color: var(--gold);
 }
 
-body:not(.theme-white) .skill-icon.mono {
+/* Mono icon inversion for dark themes */
+body:not(.theme-white) .sphere-pill.mono img {
   filter: invert(1) brightness(1.7);
 }
 
-.skill span {
-  font-size: .66rem;
-  font-weight: 400;
-  letter-spacing: .01em;
-  color: var(--muted);
-  text-align: center;
-  line-height: 1.3;
-  transition: color .2s;
+/* Fade-in the whole sphere scene on load */
+@keyframes sphereFadeIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-.skill:hover span {
+.sphere-scene {
+  animation: sphereFadeIn .9s cubic-bezier(.4, 0, .2, 1) both;
+}
+
+/* Reduced-motion: show all pills flat, no animation */
+@media (prefers-reduced-motion: reduce) {
+  .sphere-scene {
+    animation: none;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    cursor: default;
+  }
+  .sphere-stage { display: none; }
+  .sphere-pill {
+    position: static;
+    transform: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
+
+/* Responsive height */
+@media (max-width: 767px) { .sphere-scene { height: 420px; } }
+@media (max-width: 479px) { .sphere-scene { height: 340px; } }
+
+/* ---------- SKILLS TAB SWITCHER ---------- */
+
+.sk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.sk-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px;
+}
+
+.sk-tab-btn {
+  position: relative;
+  padding: 8px 22px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .72rem;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .25s, background .25s;
+  white-space: nowrap;
+}
+
+.sk-tab-btn:hover {
+  color: var(--white);
+}
+
+.sk-tab-btn.active {
+  background: var(--gold);
+  color: #0a0a0a;
+  font-weight: 700;
+}
+
+.sk-content {
+  animation: skTabFade .35s ease both;
+}
+
+@keyframes skTabFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- TECHNICAL SKILLS SPLIT LAYOUT ---------- */
+
+.skills-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .skills-container.with-sphere {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    align-items: center;
+    gap: 30px;
+  }
+}
+
+.skills-sphere-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+  overflow: visible;
+}
+
+/* Override default sphere height when split layout is active */
+.skills-container.with-sphere .sphere-scene {
+  height: 440px;
+}
+
+@media (max-width: 1023px) {
+  .skills-container.with-sphere .sphere-scene {
+    height: 380px;
+  }
+}
+
+.skills-list-wrapper {
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 10px 0;
+  width: 100%;
+  box-sizing: border-box;
+  animation: skillsListFadeIn .75s cubic-bezier(.25, 1, .5, 1) both;
+}
+
+@keyframes skillsListFadeIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.skills-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.skills-list-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .84rem;
+  font-weight: 500;
+  letter-spacing: .12em;
+  color: var(--white);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.sphere-toggle-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.sphere-toggle-btn:hover {
   color: var(--gold);
+  border-color: var(--bdgold);
+  box-shadow: 0 0 10px rgba(232, 217, 184, 0.12);
+}
+
+.skills-progress-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 1024px) {
+  .skills-container.with-sphere .skills-progress-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 28px;
+  }
+  
+  .skills-container:not(.with-sphere) .skills-progress-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px 28px;
+  }
+}
+
+.skill-progress-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.skill-progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.skill-progress-name {
+  font-weight: 500;
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: -0.01em;
+}
+
+.skill-progress-years {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+.skill-progress-bar-bg {
+  width: 100%;
+  height: 3px;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+
+.skill-progress-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--gold);
+  width: 0;
+  transition: width 2.8s cubic-bezier(0.15, 0.85, 0.3, 1);
+  box-shadow: 0 0 6px var(--bdgold);
+}
+
+/* ---------- SOFT SKILLS PANEL ---------- */
+
+.sk-soft-skills {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+.sk-soft-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.sk-soft-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--bdgold);
+  box-shadow: 0 8px 30px rgba(232, 217, 184, 0.08);
+}
+
+.sk-soft-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sk-soft-icon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sk-soft-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.sk-soft-level {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  text-transform: uppercase;
+  align-self: flex-start;
+  background: rgba(232, 217, 184, 0.06);
+  border: 1px solid rgba(232, 217, 184, 0.15);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* ---------- CERTIFICATIONS PANEL ---------- */
+
+.sk-certs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.sk-cert-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 20px 20px 18px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color .25s, background .25s, transform .25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.sk-cert-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212,175,55,.06) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.sk-cert-card:hover {
+  border-color: rgba(212, 175, 55, .45);
+  background: rgba(212, 175, 55, .05);
+  transform: translateY(-3px);
+}
+
+.sk-cert-card:hover::before {
+  opacity: 1;
+}
+
+.sk-cert-icon {
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, .06);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.08);
+}
+
+.sk-cert-icon img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.sk-cert-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sk-cert-name {
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.4;
+  margin-bottom: 4px;
+  transition: color .4s;
+}
+
+.sk-cert-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .65rem;
+  color: var(--darker);
+  letter-spacing: .04em;
+  transition: color .4s;
+}
+
+.sk-cert-badge {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(212, 175, 55, .12);
+  border: 1px solid rgba(212, 175, 55, .3);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+/* Responsive: stack experience grid on mobile */
+@media (max-width: 600px) {
+  .sk-exp-item {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .sk-tabs {
+    padding: 4px;
+    gap: 3px;
+  }
+
+  .sk-tab-btn {
+    padding: 7px 14px;
+    font-size: .65rem;
+  }
 }
 
 /* ---------- WORK ---------- */
 .work-item {
+
   display: grid;
   grid-template-columns: 1fr 40px;
   gap: 16px;
@@ -2194,16 +2613,7 @@ footer span {
     justify-content: center;
   }
 
-  .skills-cols {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
 
-  .skills-col,
-  .skills-col:last-child {
-    padding: 0;
-    border: none;
-  }
 }
 
 @media (max-width: 500px) {

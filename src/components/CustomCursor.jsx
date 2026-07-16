@@ -49,22 +49,18 @@ export default function CustomCursor() {
     document.addEventListener('mousedown', onMouseDown)
     document.addEventListener('mouseup', onMouseUp)
 
-    // Hover detection
+    // Hover detection supporting nested child elements
     const hoverTargets = 'a, button, .btn-solid, .btn-line, .skill, .tag, .project-card, .project-featured-img, .csoc, input, textarea, .theme-dd-option, .hamburger'
     const onMouseOver = (e) => {
-      if (e.target.matches(hoverTargets)) {
+      if (e.target.closest(hoverTargets)) {
         dot.classList.add('hover')
         ring.classList.add('hover')
-      }
-    }
-    const onMouseOut = (e) => {
-      if (e.target.matches(hoverTargets)) {
+      } else {
         dot.classList.remove('hover')
         ring.classList.remove('hover')
       }
     }
     document.addEventListener('mouseover', onMouseOver)
-    document.addEventListener('mouseout', onMouseOut)
 
     // Magnetic buttons
     const magneticBtns = document.querySelectorAll('.btn-solid, .btn-line, .btn-send, .csoc')
@@ -98,7 +94,6 @@ export default function CustomCursor() {
       document.removeEventListener('mousedown', onMouseDown)
       document.removeEventListener('mouseup', onMouseUp)
       document.removeEventListener('mouseover', onMouseOver)
-      document.removeEventListener('mouseout', onMouseOut)
       dot.remove()
       ring.remove()
     }
