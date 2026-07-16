@@ -637,12 +637,12 @@ nav a.active::after {
   opacity: 0;
   pointer-events: none;
   transition: opacity .3s ease;
-  z-index: 940;
+  z-index: 880; /* behind mobile nav dropdown */
 }
 
 /* Ensure nav is above overlay and clickable */
 .mobile-nav.open {
-  transform: translateX(0);
+  transform: translateY(0);
   pointer-events: auto;
 }
 
@@ -654,26 +654,23 @@ nav a.active::after {
 .mobile-nav {
   position: fixed;
   top: 0;
+  left: 0;
   right: 0;
-  height: 100dvh;
-  height: 100vh; /* fallback */
-  width: min(300px, 78vw);
-  padding: 100px 32px 40px;
+  height: auto;
+  max-height: 100vh;
+  width: 100%;
+  padding: 85px 32px 32px;
   background: var(--header-bg);
   background-color: var(--bg); /* solid fallback */
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px); /* Safari */
-  border-left: 1px solid var(--border);
-  transform: translateX(100%);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-100%);
   transition: transform .35s cubic-bezier(.4, 0, .2, 1), border-color .4s, background .4s;
-  z-index: 950;
+  z-index: 890; /* behind header (900) but in front of overlay (880) */
   overflow-y: auto;
   display: flex; /* ensure content is visible */
   flex-direction: column;
-}
-
-.mobile-nav.open {
-  transform: translateX(0);
 }
 
 .mobile-nav ul {
@@ -2243,8 +2240,8 @@ footer span {
   }
 
   .mobile-nav {
-    width: min(280px, 82vw);
-    padding: 90px 24px 32px;
+    width: 100%;
+    padding: 80px 24px 24px;
   }
 
   .tl-item {
