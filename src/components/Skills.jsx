@@ -22,16 +22,26 @@ const ALL_SKILLS = [
 
 /* ─── Soft Skills data ─────────────────────────────────────────── */
 const SOFT_SKILLS = [
-  { label: 'Problem Solving', level: 'Advanced', icon: '🧩' },
-  { label: 'Team Collaboration', level: 'Advanced', icon: '🤝' },
-  { label: 'Communication', level: 'Intermediate', icon: '💬' },
-  { label: 'Critical Thinking', level: 'Advanced', icon: '🧠' },
-  { label: 'Adaptability', level: 'Advanced', icon: '⚡' },
-  { label: 'Time Management', level: 'Intermediate', icon: '⏱️' },
-  { label: 'Project Leadership', level: 'Intermediate', icon: '🎯' },
-  { label: 'Attention to Detail', level: 'Advanced', icon: '🔍' },
-  { label: 'Creative Thinking', level: 'Advanced', icon: '💡' },
-  { label: 'Continuous Learning', level: 'Advanced', icon: '📚' },
+  {
+    label: 'Self-Directed Learning',
+    desc: 'Continuously picking up new frameworks and game engines outside of university coursework.'
+  },
+  {
+    label: 'Adaptability',
+    desc: 'Comfortable context-switching between game development (C#) and full-stack web architectures (TypeScript).'
+  },
+  {
+    label: 'Time Management',
+    desc: 'Successfully balancing a full-time IT degree with part-time professional shipping deadlines.'
+  },
+  {
+    label: 'Communication',
+    desc: 'Providing clear asynchronous updates and proactive blocking-issue reports in a remote team.'
+  },
+  {
+    label: 'Problem Solving',
+    desc: 'Breaking down complex features (like real-time AI streaming) into actionable, scalable code.'
+  }
 ]
 
 /* ─── Certifications data ──────────────────────────────────────── */
@@ -205,16 +215,18 @@ function SkillsSphere({ isSmall }) {
 /* ─── Soft Skills sub-component ────────────────────────────────── */
 function SoftSkillsPanel() {
   return (
-    <div className="sk-panel sk-soft-skills">
-      {SOFT_SKILLS.map((item, i) => (
-        <div className="sk-soft-card glass" key={i}>
-          <div className="sk-soft-header">
-            <span className="sk-soft-icon">{item.icon}</span>
-            <h4 className="sk-soft-title">{item.label}</h4>
-          </div>
-          <span className="sk-soft-level">{item.level}</span>
-        </div>
-      ))}
+    <div className="sk-panel sk-soft-skills-container">
+      <ul className="sk-soft-list">
+        {SOFT_SKILLS.map((item, i) => (
+          <li className="sk-soft-item" key={i}>
+            <span className="sk-soft-bullet">▸</span>
+            <div className="sk-soft-content">
+              <h4 className="sk-soft-title">{item.label}</h4>
+              <p className="sk-soft-desc">{item.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
@@ -305,19 +317,19 @@ export default function Skills() {
                   {[...ALL_SKILLS]
                     .sort((a, b) => b.pct - a.pct)
                     .map((skill) => (
-                    <div className="skill-progress-item" key={skill.name}>
-                      <div className="skill-progress-meta">
-                        <span className="skill-progress-name">{skill.name}</span>
-                        <span className="skill-progress-years">{skill.years}</span>
+                      <div className="skill-progress-item" key={skill.name}>
+                        <div className="skill-progress-meta">
+                          <span className="skill-progress-name">{skill.name}</span>
+                          <span className="skill-progress-years">{skill.years}</span>
+                        </div>
+                        <div className="skill-progress-bar-bg">
+                          <div
+                            className="skill-progress-bar-fill"
+                            style={{ width: animate ? `${skill.pct}%` : '0%' }}
+                          />
+                        </div>
                       </div>
-                      <div className="skill-progress-bar-bg">
-                        <div
-                          className="skill-progress-bar-fill"
-                          style={{ width: animate ? `${skill.pct}%` : '0%' }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </div>
             </div>

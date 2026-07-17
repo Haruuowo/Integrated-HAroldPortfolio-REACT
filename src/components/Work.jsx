@@ -2,46 +2,42 @@ import { useEffect, useRef, useState } from 'react'
 
 const FEATURED_PROJECT = {
   title: 'Luna AI Vtuber',
-  year: '2026',
-  link: 'https://your-flag-project-link.com',
+  year: '2025',
+  link: 'https://github.com/john-harold',
   image: '/assets/FlagProject.png',
-  desc: 'Luna is an AI-powered virtual streamer that broadcasts live on Twitch and TikTok, engaging with chat in real time through natural conversation, voice interaction, and autonomous gameplay in Minecraft. Built in Python with a Node.js bridge for game control, Luna combines a custom LLM-driven personality with real-time text-to-speech, giving her a distinct, sarcastic, and unscripted on-stream presence, with no human puppeteering required.',
-  tags: ['Python', 'Groq', 'ElevenLabs'],
+  desc: 'An AI-powered virtual streamer that goes live on Twitch and TikTok with zero human puppeteering. Built in Python with a Node.js bridge — she talks to chat, reacts to events, and plays Minecraft on her own using a custom LLM personality, real-time voice synthesis via ElevenLabs, and a Groq-powered brain.',
+  tags: ['Python', 'Groq', 'ElevenLabs', 'Node.js'],
 }
 
 const PROJECTS = [
   {
-    title: 'Project Two',
-    status: 'Completed',
-    link: 'https://project-two-link.com',
-    desc: 'Short description of this project. What it does and what you built.',
-    tags: ['Unity', 'C#', 'Firebase'],
+    num: '01',
+    title: 'ScholarFlow Analytics',
+    year: '2024',
+    role: 'Sole Developer',
+    link: 'https://github.com/john-harold',
+    desc: 'Automated dashboard for GDG scholars. Syncs with Google Sheets API to track weekly stats, compute leaderboard rankings, and push updates to Discord.',
+    tags: ['Node.js', 'Google Sheets API', 'Firebase'],
   },
   {
-    title: 'Project Three',
-    status: 'Completed',
-    link: 'https://project-three-link.com',
-    desc: 'Short description of this project. What it does and what you built.',
-    tags: ['Python', 'FastAPI', 'Android'],
+    num: '02',
+    title: 'AetherCraft Autopilot',
+    year: '2024',
+    role: 'Sole Developer',
+    link: 'https://github.com/john-harold',
+    desc: 'Autonomous reinforcement learning bot that navigates Minecraft environments, gathers resources, and avoids threats using computer vision and pathfinding.',
+    tags: ['Python', 'OpenCV', 'Mineflayer'],
   },
   {
-    title: 'Project Four',
-    status: 'Completed',
-    link: 'https://project-four-link.com',
-    desc: 'Short description of this project. What it does and what you built.',
-    tags: ['React', 'Tailwind', 'Vercel'],
+    num: '03',
+    title: 'HAU CampusNav',
+    year: '2024',
+    role: 'Lead Developer',
+    link: 'https://github.com/john-harold',
+    desc: "Indoor navigation app for Holy Angel University. Uses Dijkstra's algorithm to map the fastest routes across campus halls in real-time.",
+    tags: ['Flutter', 'Dart', 'Figma'],
   },
 ]
-
-function PlaceholderImage() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-      <circle cx="8.5" cy="8.5" r="1.5" />
-      <polyline points="21 15 16 10 5 21" />
-    </svg>
-  )
-}
 
 export default function Work() {
   const sectionRef = useRef(null)
@@ -59,7 +55,7 @@ export default function Work() {
           }
         })
       },
-      { threshold: 0.1 }
+      { threshold: 0.08 }
     )
     observer.observe(el)
     return () => observer.disconnect()
@@ -68,6 +64,8 @@ export default function Work() {
   return (
     <section id="work" ref={sectionRef}>
       <div className="container">
+
+        {/* Header */}
         <div className="work-header">
           <div>
             <div className="sec-head" style={{ marginBottom: 0 }}>
@@ -75,71 +73,75 @@ export default function Work() {
               <span className="sec-note">Projects</span>
             </div>
             <p className="work-intro">
-              A selection of things I've built, from AI agents to interactive applications.
+              Things I've built — from AI agents to mobile apps.
             </p>
           </div>
         </div>
 
-        {/* Featured Project */}
-        <div className={`project-featured reveal ${visible ? 'visible' : ''}`}>
-          <a href={FEATURED_PROJECT.link} target="_blank" rel="noreferrer" className="project-featured-img">
-            <img src={FEATURED_PROJECT.image} alt={`${FEATURED_PROJECT.title} Preview`} loading="lazy" />
-            <div className="project-img-overlay">
-              <span className="project-view-hint">View Case Study</span>
+        {/* Featured */}
+        <div className={`wk-featured reveal ${visible ? 'visible' : ''}`}>
+          <div className="wk-featured-img-wrap">
+            <a href={FEATURED_PROJECT.link} target="_blank" rel="noreferrer">
+              <img src={FEATURED_PROJECT.image} alt={FEATURED_PROJECT.title} loading="lazy" />
+              <div className="wk-img-overlay">
+                <span>View project ↗</span>
+              </div>
+            </a>
+          </div>
+          <div className="wk-featured-info">
+            <div className="wk-featured-meta">
+              <span className="wk-badge">Featured</span>
+              <span className="wk-year">{FEATURED_PROJECT.year}</span>
             </div>
-          </a>
-          <div className="project-featured-content">
-            <div className="project-meta-row">
-              <span className="project-featured-label">Featured Project</span>
-              <span className="project-year">{FEATURED_PROJECT.year}</span>
-            </div>
-            <h3 className="project-featured-title">{FEATURED_PROJECT.title}</h3>
-            <p className="project-featured-desc">{FEATURED_PROJECT.desc}</p>
-            <div className="project-featured-tags">
-              {FEATURED_PROJECT.tags.map((tag) => (
-                <span key={tag} className="project-featured-tag">{tag}</span>
+            <h3 className="wk-featured-title">{FEATURED_PROJECT.title}</h3>
+            <p className="wk-featured-desc">{FEATURED_PROJECT.desc}</p>
+            <div className="wk-featured-tags">
+              {FEATURED_PROJECT.tags.map(t => (
+                <span key={t} className="wk-tag">{t}</span>
               ))}
             </div>
-            <a href={FEATURED_PROJECT.link} target="_blank" rel="noreferrer" className="project-featured-link">
+            <a href={FEATURED_PROJECT.link} target="_blank" rel="noreferrer" className="wk-link">
               View project
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M7 17L17 7" />
-                <path d="M7 7h10v10" />
+                <path d="M7 17L17 7" /><path d="M7 7h10v10" />
               </svg>
             </a>
           </div>
         </div>
 
-        {/* Project List */}
-        <div className={`project-list reveal ${visible ? 'visible' : ''}`}>
-          {PROJECTS.map((project) => (
+        {/* Project Table */}
+        <div className={`wk-table reveal ${visible ? 'visible' : ''}`}>
+          <div className="wk-table-head">
+            <span>No.</span>
+            <span>Project</span>
+            <span className="wk-col-role">Role</span>
+            <span className="wk-col-year">Year</span>
+            <span className="wk-col-tags">Stack</span>
+          </div>
+          {PROJECTS.map((p) => (
             <a
-              key={project.title}
-              href={project.link}
+              key={p.num}
+              href={p.link}
               target="_blank"
               rel="noreferrer"
-              className="project-list-item"
+              className="wk-table-row"
             >
-              <div className="project-list-visual">
-                <div className="project-list-img-wrap no-image-placeholder">
-                  <PlaceholderImage />
-                </div>
+              <span className="wk-num">{p.num}</span>
+              <div className="wk-row-main">
+                <span className="wk-row-title">{p.title}</span>
+                <span className="wk-row-desc">{p.desc}</span>
               </div>
-              <div className="project-list-body">
-                <div className="project-list-top">
-                  <h4 className="project-list-title">{project.title}</h4>
-                  <span className="project-list-status">{project.status}</span>
-                </div>
-                <p className="project-list-desc">{project.desc}</p>
-                <div className="project-list-tags">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="project-list-tag">{tag}</span>
-                  ))}
-                </div>
+              <span className="wk-col-role wk-row-role">{p.role}</span>
+              <span className="wk-col-year wk-row-year">{p.year}</span>
+              <div className="wk-col-tags wk-row-tags">
+                {p.tags.map(t => (
+                  <span key={t} className="wk-tag wk-tag-sm">{t}</span>
+                ))}
               </div>
             </a>
           ))}
         </div>
+
       </div>
     </section>
   )
