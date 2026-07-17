@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrambleTextPlugin)
 
 const TAGS = ['Software Engineering', 'AI/ML Engineer', 'Frontend Developer', 'Backend Developer']
 
-const FULL_TEXT = "HI! im Harold, I'm a Computer Science student at Holy Angel University, focused on artificial intelligence, software engineering, and building things people actually use. I like turning ideas AI tools, clean interfaces, I occasionally like creating silly projects that i could turn into real working code."
+const FULL_TEXT = "Hi, I'm Harold, a Computer Science student at Holy Angel University focused on artificial intelligence, software engineering, and building things people actually use. I like turning ideas into AI tools and clean interfaces, and I occasionally like creating silly projects that I can turn into real working code."
 
 export default function About() {
   const sectionRef = useRef(null)

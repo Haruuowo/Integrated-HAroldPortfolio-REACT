@@ -9,7 +9,7 @@ const THEME_META = {
 const NAV_LINKS = [
   { href: '#about', label: 'About' },
   { href: '#skills', label: 'Skills' },
-  { href: '#work', label: 'Work' },
+  { href: '#work', label: 'Projects' },
   { href: '#experience', label: 'Experience' },
   { href: '#contact', label: 'Contact' },
 ]
@@ -29,6 +29,10 @@ export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpe
       document.querySelectorAll('section').forEach(s => {
         if (window.scrollY >= s.offsetTop - 160) cur = s.id
       })
+      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10
+      if (isAtBottom) {
+        cur = 'contact'
+      }
       setActiveSection(cur)
     }
     window.addEventListener('scroll', onScroll)

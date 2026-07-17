@@ -1,46 +1,29 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
+import { ALL_SKILLS } from '../data/skillsData'
 
-/* ─── Skill proficiency data (years = display label, pct = bar fill 0-100) ── */
-const ALL_SKILLS = [
-  { name: 'HTML', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg', years: '2 yrs', pct: 80 },
-  { name: 'CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg', years: '2 yrs', pct: 75 },
-  { name: 'JavaScript', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', years: '2.5 yrs', pct: 82 },
-  { name: 'React', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', years: '3 mo', pct: 40 },
-  { name: 'Tailwind CSS', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg', years: '1.5 yrs', pct: 75 },
-  { name: 'Node.js', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', years: '1.5 yrs', pct: 70 },
-  { name: 'Express', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg', years: '1 yr', pct: 65, mono: true },
-  { name: 'Python', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', years: '3 yrs', pct: 90 },
-  { name: 'PostgreSQL', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg', years: '1 yr', pct: 60 },
-  { name: 'Firebase', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg', years: '1.5 yrs', pct: 68 },
-  { name: 'Java', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg', years: '3 yrs', pct: 88 },
-  { name: 'Dart / Flutter', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dart/dart-original.svg', years: '1 yr', pct: 60 },
-  { name: 'Git & GitHub', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg', years: '3 yrs', pct: 85 },
-  { name: 'Figma', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg', years: '1.5 yrs', pct: 65 },
-  { name: 'Android Studio', icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/androidstudio/androidstudio-original.svg', years: '1 yr', pct: 55 },
-]
 
 
 /* ─── Soft Skills data ─────────────────────────────────────────── */
 const SOFT_SKILLS = [
   {
     label: 'Self-Directed Learning',
-    desc: 'Continuously picking up new frameworks and game engines outside of university coursework.'
+    desc: 'Constantly picking up new tools outside of class — currently deep into ML pipelines and AI integrations.'
   },
   {
     label: 'Adaptability',
-    desc: 'Comfortable context-switching between game development (C#) and full-stack web architectures (TypeScript).'
+    desc: 'Comfortable jumping between different tech stacks and problem domains depending on what the project needs.'
   },
   {
     label: 'Time Management',
-    desc: 'Successfully balancing a full-time IT degree with part-time professional shipping deadlines.'
+    desc: 'Balancing a full CS degree, personal projects, and structured interview prep all at once.'
   },
   {
     label: 'Communication',
-    desc: 'Providing clear asynchronous updates and proactive blocking-issue reports in a remote team.'
+    desc: 'Used to keeping teammates aligned and flagging blockers early, especially during crunch periods.'
   },
   {
     label: 'Problem Solving',
-    desc: 'Breaking down complex features (like real-time AI streaming) into actionable, scalable code.'
+    desc: 'Breaking down vague or difficult requirements into scoped, actionable steps — then actually shipping them.'
   }
 ]
 
@@ -93,17 +76,17 @@ function SkillsSphere({ isSmall }) {
     rotX: 0.3, rotY: 0,
     velX: 0, velY: 0.003,
     dragging: false, lastX: 0, lastY: 0,
-    paused: false, raf: null,
+    hovered: false, raf: null,
     points: fibonacciSphere(ALL_SKILLS.length),
-    radius: isSmall ? 190 : 260,
+    radius: isSmall ? 150 : 210,
   })
 
   const getRadius = () => {
     const w = window.innerWidth
-    if (w < 480) return 130
-    if (w < 768) return 160
-    if (w < 1024) return 180
-    return isSmall ? 190 : 260
+    if (w < 480) return 100
+    if (w < 768) return 130
+    if (w < 1024) return 150
+    return isSmall ? 150 : 210
   }
 
   const project = useCallback(() => {
@@ -128,9 +111,10 @@ function SkillsSphere({ isSmall }) {
 
   const tick = useCallback(() => {
     const s = stateRef.current
-    if (!s.paused && !s.dragging) {
-      s.rotY += s.velY
-      s.rotX = Math.max(-0.6, Math.min(0.6, s.rotX + s.velX))
+    if (!s.dragging) {
+      const speedMultiplier = s.hovered ? 0.15 : 1
+      s.rotY += s.velY * speedMultiplier
+      s.rotX = Math.max(-0.6, Math.min(0.6, s.rotX + s.velX * speedMultiplier))
     }
     if (s.dragging) { s.velY *= 0.92; s.velX *= 0.92 }
     project()
@@ -190,8 +174,8 @@ function SkillsSphere({ isSmall }) {
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
-      onMouseEnter={() => { stateRef.current.paused = true }}
-      onMouseLeave={() => { stateRef.current.paused = false; stateRef.current.dragging = false }}
+      onMouseEnter={() => { stateRef.current.hovered = true }}
+      onMouseLeave={() => { stateRef.current.hovered = false; stateRef.current.dragging = false }}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -258,18 +242,11 @@ const TABS = [
   { id: 'certs', label: 'Certifications', hint: '' },
 ]
 
+const SKILL_CATS = ['Languages', 'Frameworks', 'Databases', 'Tools', 'Design']
+
 export default function Skills() {
   const [activeTab, setActiveTab] = useState('skills')
-  const [showSphere, setShowSphere] = useState(true)
-  const [animate, setAnimate] = useState(false)
-
-  useEffect(() => {
-    if (activeTab === 'skills') {
-      setAnimate(false)
-      const timer = setTimeout(() => setAnimate(true), 100)
-      return () => clearTimeout(timer)
-    }
-  }, [activeTab])
+  const [showList, setShowList] = useState(false)
 
   return (
     <section id="skills">
@@ -296,40 +273,49 @@ export default function Skills() {
         {/* Panel content — key forces remount → re-triggers fade animation */}
         <div className="sk-content" key={activeTab}>
           {activeTab === 'skills' && (
-            <div className={`skills-container${showSphere ? ' with-sphere' : ''}`}>
-              {showSphere && (
-                <div className="skills-sphere-wrapper">
-                  <SkillsSphere isSmall={true} />
-                </div>
-              )}
-              <div className="skills-list-wrapper">
+            <div className={`skills-container${showList ? ' with-sphere' : ''}`}>
+              <div className="skills-sphere-wrapper" style={{ flexDirection: 'column', gap: '20px' }}>
+                <SkillsSphere isSmall={showList} />
+                {!showList && (
+                  <button
+                    onClick={() => setShowList(true)}
+                    className="sphere-toggle-btn"
+                    style={{ padding: '8px 18px', fontSize: '0.75rem', marginTop: '10px' }}
+                    type="button"
+                  >
+                    Show Proficiency List
+                  </button>
+                )}
+              </div>
+              <div className={`skills-list-wrapper ${showList ? 'visible' : 'hidden'}`}>
                 <div className="skills-list-header">
                   <h3 className="skills-list-title">TECHNICAL SKILLS</h3>
                   <button
-                    onClick={() => setShowSphere(!showSphere)}
+                    onClick={() => setShowList(false)}
                     className="sphere-toggle-btn"
                     type="button"
                   >
-                    {showSphere ? 'Hide Sphere' : '← Show Sphere'}
+                    Hide Details
                   </button>
                 </div>
-                <div className="skills-progress-list">
-                  {[...ALL_SKILLS]
-                    .sort((a, b) => b.pct - a.pct)
-                    .map((skill) => (
-                      <div className="skill-progress-item" key={skill.name}>
-                        <div className="skill-progress-meta">
-                          <span className="skill-progress-name">{skill.name}</span>
-                          <span className="skill-progress-years">{skill.years}</span>
-                        </div>
-                        <div className="skill-progress-bar-bg">
-                          <div
-                            className="skill-progress-bar-fill"
-                            style={{ width: animate ? `${skill.pct}%` : '0%' }}
-                          />
+                <div className="skills-cat-list">
+                  {SKILL_CATS.map(cat => {
+                    const items = ALL_SKILLS.filter(s => s.cat === cat)
+                    if (!items.length) return null
+                    return (
+                      <div className="skill-cat-group" key={cat}>
+                        <span className="skill-cat-label">{cat}</span>
+                        <div className="skill-cat-items">
+                          {items.map(skill => (
+                            <div className="skill-cat-row" key={skill.name}>
+                              <img src={skill.icon} alt={skill.name} className="skill-cat-icon" loading="lazy" />
+                              <span className="skill-cat-name">{skill.name}</span>
+                            </div>
+                          ))}
                         </div>
                       </div>
-                    ))}
+                    )
+                  })}
                 </div>
               </div>
             </div>

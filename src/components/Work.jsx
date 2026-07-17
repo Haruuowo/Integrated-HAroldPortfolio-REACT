@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 const FEATURED_PROJECT = {
   title: 'Luna AI Vtuber',
   year: '2025',
-  link: 'https://github.com/john-harold',
+  link: 'https://github.com/Haruuowo/AI_VirtualYoutuber',
   image: '/assets/FlagProject.png',
   desc: 'An AI-powered virtual streamer that goes live on Twitch and TikTok with zero human puppeteering. Built in Python with a Node.js bridge — she talks to chat, reacts to events, and plays Minecraft on her own using a custom LLM personality, real-time voice synthesis via ElevenLabs, and a Groq-powered brain.',
   tags: ['Python', 'Groq', 'ElevenLabs', 'Node.js'],
@@ -55,7 +55,7 @@ export default function Work() {
           }
         })
       },
-      { threshold: 0.08 }
+      { threshold: 0.05 }
     )
     observer.observe(el)
     return () => observer.disconnect()
@@ -65,42 +65,56 @@ export default function Work() {
     <section id="work" ref={sectionRef}>
       <div className="container">
 
-        {/* Header */}
-        <div className="work-header">
-          <div>
+        {/* Section Header */}
+        <div className={`proj-header reveal ${visible ? 'visible' : ''}`}>
+          <div className="proj-header-left">
             <div className="sec-head" style={{ marginBottom: 0 }}>
-              <h2 className="sec-title">Work</h2>
-              <span className="sec-note">Projects</span>
+              <h2 className="sec-title">Projects</h2>
+              <span className="sec-note">Things I've built</span>
             </div>
-            <p className="work-intro">
-              Things I've built — from AI agents to mobile apps.
+            <p className="proj-intro">
+              From AI agents to mobile apps — a collection of things I've shipped, broken, and shipped again.
             </p>
           </div>
+          <a
+            href="https://github.com/Haruuowo"
+            target="_blank"
+            rel="noreferrer"
+            className="proj-github-link"
+          >
+            View all on GitHub
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M7 17L17 7" /><path d="M7 7h10v10" />
+            </svg>
+          </a>
         </div>
 
-        {/* Featured */}
-        <div className={`wk-featured reveal ${visible ? 'visible' : ''}`}>
-          <div className="wk-featured-img-wrap">
-            <a href={FEATURED_PROJECT.link} target="_blank" rel="noreferrer">
-              <img src={FEATURED_PROJECT.image} alt={FEATURED_PROJECT.title} loading="lazy" />
-              <div className="wk-img-overlay">
-                <span>View project ↗</span>
-              </div>
-            </a>
-          </div>
-          <div className="wk-featured-info">
-            <div className="wk-featured-meta">
-              <span className="wk-badge">Featured</span>
-              <span className="wk-year">{FEATURED_PROJECT.year}</span>
+        {/* Featured Hero Card */}
+        <div className={`proj-hero reveal ${visible ? 'visible' : ''}`}>
+          <a
+            href={FEATURED_PROJECT.link}
+            target="_blank"
+            rel="noreferrer"
+            className="proj-hero-img-wrap"
+          >
+            <img src={FEATURED_PROJECT.image} alt={FEATURED_PROJECT.title} loading="lazy" />
+            <div className="proj-hero-overlay">
+              <span className="proj-hero-hint">View project ↗</span>
             </div>
-            <h3 className="wk-featured-title">{FEATURED_PROJECT.title}</h3>
-            <p className="wk-featured-desc">{FEATURED_PROJECT.desc}</p>
-            <div className="wk-featured-tags">
+          </a>
+          <div className="proj-hero-body">
+            <div className="proj-hero-top">
+              <span className="proj-badge">Featured</span>
+              <span className="proj-year-tag">{FEATURED_PROJECT.year}</span>
+            </div>
+            <h3 className="proj-hero-title">{FEATURED_PROJECT.title}</h3>
+            <p className="proj-hero-desc">{FEATURED_PROJECT.desc}</p>
+            <div className="proj-hero-tags">
               {FEATURED_PROJECT.tags.map(t => (
-                <span key={t} className="wk-tag">{t}</span>
+                <span key={t} className="proj-tag">{t}</span>
               ))}
             </div>
-            <a href={FEATURED_PROJECT.link} target="_blank" rel="noreferrer" className="wk-link">
+            <a href={FEATURED_PROJECT.link} target="_blank" rel="noreferrer" className="proj-cta">
               View project
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M7 17L17 7" /><path d="M7 7h10v10" />
@@ -109,34 +123,30 @@ export default function Work() {
           </div>
         </div>
 
-        {/* Project Table */}
-        <div className={`wk-table reveal ${visible ? 'visible' : ''}`}>
-          <div className="wk-table-head">
-            <span>No.</span>
-            <span>Project</span>
-            <span className="wk-col-role">Role</span>
-            <span className="wk-col-year">Year</span>
-            <span className="wk-col-tags">Stack</span>
-          </div>
+        {/* Project Cards Grid */}
+        <div className={`proj-grid reveal ${visible ? 'visible' : ''}`}>
           {PROJECTS.map((p) => (
             <a
               key={p.num}
               href={p.link}
               target="_blank"
               rel="noreferrer"
-              className="wk-table-row"
+              className="proj-card"
             >
-              <span className="wk-num">{p.num}</span>
-              <div className="wk-row-main">
-                <span className="wk-row-title">{p.title}</span>
-                <span className="wk-row-desc">{p.desc}</span>
+              <div className="proj-card-top">
+                <span className="proj-card-num">{p.num}</span>
+                <span className="proj-card-year">{p.year}</span>
               </div>
-              <span className="wk-col-role wk-row-role">{p.role}</span>
-              <span className="wk-col-year wk-row-year">{p.year}</span>
-              <div className="wk-col-tags wk-row-tags">
+              <h4 className="proj-card-title">{p.title}</h4>
+              <p className="proj-card-desc">{p.desc}</p>
+              <div className="proj-card-tags">
                 {p.tags.map(t => (
-                  <span key={t} className="wk-tag wk-tag-sm">{t}</span>
+                  <span key={t} className="proj-tag proj-tag-sm">{t}</span>
                 ))}
+              </div>
+              <div className="proj-card-footer">
+                <span className="proj-card-role">{p.role}</span>
+                <span className="proj-card-arrow">↗</span>
               </div>
             </a>
           ))}
