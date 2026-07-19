@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { ALL_SKILLS } from '../data/skillsData'
 
 const COMMAND_LIST = {
@@ -30,10 +30,25 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
   ])
   const [matrixActive, setMatrixActive] = useState(false)
 
+  // --- Drag state ---
+  // pos: null = use CSS default (bottom-right), otherwise {x, y} = left/top in px
+  const [pos, setPos] = useState(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStartRef = useRef(null) // { pointerX, pointerY, winX, winY }
+
   const terminalRef = useRef(null)
   const inputRef = useRef(null)
   const outputEndRef = useRef(null)
   const canvasRef = useRef(null)
+
+  // Reset position when terminal is closed so it returns to default spot
+  useEffect(() => {
+    if (!isOpen) {
+      // Small delay so the close animation plays before snapping back
+      const t = setTimeout(() => setPos(null), 420)
+      return () => clearTimeout(t)
+    }
+  }, [isOpen])
 
   // Focus terminal input when it opens
   useEffect(() => {
@@ -119,6 +134,51 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
       window.removeEventListener('resize', handleResize)
     }
   }, [matrixActive, isOpen])
+
+  // ---- Drag logic ----
+  const onPointerDown = useCallback((e) => {
+    // Only drag on the header bar itself (not on dots/buttons inside it)
+    if (e.target.closest('.window-dots, .terminal-actions, .dot, .action-btn')) return
+    e.preventDefault()
+    e.currentTarget.setPointerCapture(e.pointerId)
+
+    const el = terminalRef.current
+    if (!el) return
+    const rect = el.getBoundingClientRect()
+
+    setIsDragging(true)
+    dragStartRef.current = {
+      pointerX: e.clientX,
+      pointerY: e.clientY,
+      winX: rect.left,
+      winY: rect.top,
+    }
+  }, [])
+
+  const onPointerMove = useCallback((e) => {
+    if (!isDragging || !dragStartRef.current) return
+    const { pointerX, pointerY, winX, winY } = dragStartRef.current
+    const dx = e.clientX - pointerX
+    const dy = e.clientY - pointerY
+
+    const el = terminalRef.current
+    if (!el) return
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const w = el.offsetWidth
+    const h = el.offsetHeight
+
+    // Clamp so it can't go off-screen
+    const newX = Math.min(Math.max(winX + dx, 0), vw - w)
+    const newY = Math.min(Math.max(winY + dy, 0), vh - h)
+
+    setPos({ x: newX, y: newY })
+  }, [isDragging])
+
+  const onPointerUp = useCallback(() => {
+    setIsDragging(false)
+    dragStartRef.current = null
+  }, [])
 
   const executeCommand = (cmd) => {
     const trimmed = cmd.trim().toLowerCase()
@@ -255,16 +315,37 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
     }
   }
 
+  // Build inline style: use dragged position (top/left) or default CSS (bottom/right)
+  const windowStyle = pos
+    ? {
+        top: `${pos.y}px`,
+        left: `${pos.x}px`,
+        bottom: 'auto',
+        right: 'auto',
+        // While dragged, suppress the CSS transition so it tracks instantly
+        transition: isDragging
+          ? 'border-color 0.4s, box-shadow 0.4s'
+          : 'border-color 0.4s, box-shadow 0.4s, opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+      }
+    : {}
+
   return (
     <div
       ref={terminalRef}
       onClick={handleTerminalClick}
-      className={`terminal-window ${isOpen ? 'open' : ''} ${matrixActive ? 'matrix-mode' : ''} ${isShifted ? 'shifted-up' : ''}`}
+      className={`terminal-window ${isOpen ? 'open' : ''} ${matrixActive ? 'matrix-mode' : ''} ${isShifted && !pos ? 'shifted-up' : ''}`}
+      style={windowStyle}
     >
       {matrixActive && <canvas ref={canvasRef} className="matrix-canvas" />}
-      
-      {/* Top Title Bar */}
-      <div className="terminal-header">
+
+      {/* Top Title Bar — acts as drag handle */}
+      <div
+        className={`terminal-header${isDragging ? ' dragging' : ''}`}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
         <div className="window-dots">
           <span className="dot red" onClick={(e) => { e.stopPropagation(); onClose(); }} style={{ cursor: 'pointer' }} />
           <span className="dot yellow" />
@@ -288,7 +369,7 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
             )}
           </div>
         ))}
-        
+
         {/* Input Row */}
         <div className="terminal-row input-row">
           <span className="prompt">visitor@harold-dev:~$</span>

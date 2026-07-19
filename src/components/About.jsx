@@ -64,6 +64,9 @@ export default function About() {
                 },
                 onComplete: () => {
                   heading.classList.remove('scrambling');
+                  // Switch from gold scramble color to clean white final text
+                  heading.style.color = 'var(--white)';
+                  heading.style.textShadow = 'none';
                   setTagsVisible(true);
                 }
               }
@@ -113,13 +116,12 @@ export default function About() {
               <span className="about-typed-ghost" aria-hidden="true">
                 {FULL_TEXT}
               </span>
+              {/* Start empty — GSAP scrambles in the text, no flash-of-content */}
               <span
                 ref={headingRef}
                 className="about-typed animate-text"
                 aria-hidden="true"
-              >
-                {FULL_TEXT}
-              </span>
+              />
             </p>
             <div className={`tagstrip ${tagsVisible ? 'stagger-in' : ''}`} ref={tagsRef}>
               {TAGS.map((tag) => (

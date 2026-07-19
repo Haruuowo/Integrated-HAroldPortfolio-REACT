@@ -740,6 +740,17 @@ body.nav-open {
   transition: background .5s;
 }
 
+/* iOS Safari does not support background-attachment:fixed — override to scroll on touch devices */
+@media (pointer: coarse) {
+  #hero {
+    background:
+      var(--hero-grad),
+      radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .5) 100%),
+      var(--hero-img) center 65%/cover no-repeat scroll;
+    background-attachment: scroll;
+  }
+}
+
 #hero>div {
   position: relative;
   z-index: 3;
@@ -1093,6 +1104,7 @@ section {
   object-fit: cover;
 }
 
+/* Normal paragraphs inside about-body get bold white text */
 .about-body p {
   color: var(--white);
   font-size: 1.15rem;
@@ -1106,6 +1118,19 @@ section {
   color: var(--white);
   font-weight: 700;
   transition: color .4s;
+}
+
+/* The scramble-text paragraph overrides the bold/margin from .about-body p
+   because it uses JetBrains Mono at 500 weight, not the DM Sans bold style */
+.about-body p.about-typed-wrap {
+  font-weight: 500;
+  font-size: 1.02rem;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  letter-spacing: -.01em;
+  line-height: 1.7;
+  margin-bottom: 0;
+  /* Enough breathing room before the tag strip */
+  margin-bottom: 4px;
 }
 
 .about-typed {
@@ -1146,29 +1171,35 @@ section {
   line-height: 1.7;
 }
 
+/* Ghost span: invisible clone of the text — holds layout height
+   so the positioned animate span doesn't collapse the parent */
 .about-typed-ghost {
   display: block;
   font-family: 'JetBrains Mono', 'Courier New', monospace;
   font-size: 1.02rem;
   font-weight: 500;
   letter-spacing: -.01em;
+  line-height: 1.7;
   opacity: 0;
   pointer-events: none;
   user-select: none;
-  line-height: 1.7;
+  white-space: pre-wrap;
 }
 
+/* Animated scramble span — sits absolutely on top of the ghost spacer */
 .about-typed.animate-text {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
   display: block;
   word-break: break-word;
   overflow-wrap: anywhere;
-  color: var(--white);
+  /* Use gold during scramble; GSAP will set the final plain white text */
+  color: var(--gold);
+  font-weight: 500;
   line-height: 1.7;
+  text-shadow: 0 0 6px rgba(232, 217, 184, .25);
 }
 
 .type-cursor {
@@ -3203,6 +3234,8 @@ header {
   border: 1px solid var(--bdgold);
   transition: background .25s, color .25s, gap .2s;
   flex-shrink: 0;
+  /* Allow wrapping on narrow mobile screens */
+  word-break: break-word;
 }
 
 .proj-github-link:hover {
@@ -3535,12 +3568,42 @@ header {
     gap: 20px;
   }
 
+  /* Let the GitHub link wrap naturally so it doesn't overflow on narrow screens */
+  .proj-github-link {
+    white-space: normal;
+    align-self: flex-start;
+  }
+
   .proj-grid {
     grid-template-columns: 1fr;
   }
 
   .proj-hero-title {
     font-size: 1.6rem;
+  }
+}
+
+/* Extra-small phones (≤500px) */
+@media (max-width: 500px) {
+  .proj-hero-title {
+    font-size: 1.35rem;
+  }
+
+  .proj-hero-desc {
+    font-size: .85rem;
+  }
+
+  .proj-card {
+    padding: 20px 18px;
+  }
+
+  .proj-hero {
+    gap: 28px;
+    padding-bottom: 48px;
+  }
+
+  .proj-header {
+    margin-bottom: 44px;
   }
 }
 
@@ -3628,6 +3691,19 @@ header {
   justify-content: space-between;
   padding: 0 16px;
   user-select: none;
+  /* Indicate the header is draggable */
+  cursor: grab;
+  touch-action: none;
+}
+
+.terminal-header.dragging {
+  cursor: grabbing;
+}
+
+/* While dragging, lift the window slightly and glow the border */
+.terminal-window:has(.terminal-header.dragging) {
+  border-color: var(--bdgold);
+  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--bdgold);
 }
 
 .window-dots {
