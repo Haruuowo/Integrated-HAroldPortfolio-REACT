@@ -30,13 +30,21 @@ export default function About() {
           if (entry.isIntersecting && !hasAnimated.current) {
             hasAnimated.current = true
 
-            gsap.from(avatar, {
-              x: -80,
-              opacity: 0,
-              scale: 0.85,
-              duration: 1.2,
-              ease: 'power3.out',
-            })
+            // Frosted dissolve — blurred static resolves into the real photo
+            gsap.fromTo(avatar,
+              {
+                opacity: 0,
+                filter: 'blur(24px) brightness(1.4) saturate(0)',
+                scale: 1.06,
+              },
+              {
+                opacity: 1,
+                filter: 'blur(0px) brightness(1) saturate(1)',
+                scale: 1,
+                duration: 1.6,
+                ease: 'power2.out',
+              }
+            )
 
             gsap.from(text, {
               x: 80,
@@ -50,12 +58,12 @@ export default function About() {
             gsap.fromTo(heading, 
               { scrambleText: { text: "" } },
               {
-                duration: 2.5,
+                duration: 5,          // total reveal time (was 2.5s)
                 scrambleText: {
                   text: FULL_TEXT,
                   chars: "lowerCase", // only lowercase — much narrower
-                  revealDelay: 0.3,
-                  speed: 0.6,
+                  revealDelay: 0.6,   // chars stay scrambled longer before locking (was 0.3)
+                  speed: 0.3,         // scramble cycling speed — lower = slower chaos (was 0.6)
                 },
                 ease: "none",
                 delay: 0.5,
@@ -79,7 +87,7 @@ export default function About() {
                 duration: 0.5,
                 stagger: 0.1,
                 ease: 'power3.out',
-                delay: 3,
+                delay: 5.8, // pushed to match longer scramble (was 3s)
               })
             }
 
