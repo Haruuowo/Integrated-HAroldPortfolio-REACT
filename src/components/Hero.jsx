@@ -1,79 +1,15 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import HyperText from './HyperText'
+import InteractiveHoverButton from './InteractiveHoverButton'
 
-const WORDS = ['Software Engineer', 'Full Stack Developer', 'AI/ML Engineer', 'Mobile App Developer']
-
-// #region agent log
-let _heroEffectInstance = 0
-const _dbg = (location, message, data, hypothesisId) => {
-  fetch('http://127.0.0.1:7690/ingest/67716fa6-5a36-491e-8f79-4850ffe8f44f', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': '5435af' }, body: JSON.stringify({ sessionId: '5435af', location, message, data, hypothesisId, timestamp: Date.now(), runId: 'pre-fix' }) }).catch(() => {})
-}
-// #endregion
+const WORDS = ['Software Engineer', 'AI/ML Engineer', 'Mobile Developer', 'Full Stack Developer']
 
 export default function Hero() {
   const heroRef = useRef(null)
-  const scramble1Ref = useRef(null)
-  const scramble2Ref = useRef(null)
-  const [nameLine1, setNameLine1] = useState('')
-  const [nameLine2, setNameLine2] = useState('')
-  const [nameDone, setNameDone] = useState(false)
   const [typedWord, setTypedWord] = useState('')
   const [wordIndex, setWordIndex] = useState(0)
   const [charIndex, setCharIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
-
-  const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*'
-
-  const scramble = useCallback((setter, original, ref, onComplete) => {
-    if (ref.current) {
-      clearInterval(ref.current)
-    }
-    let iterations = 0
-    ref.current = setInterval(() => {
-      setter(
-        original
-          .split('')
-          .map((char, i) =>
-            i < Math.floor(iterations)
-              ? original[i]
-              : scrambleChars[Math.floor(Math.random() * scrambleChars.length)]
-          )
-          .join('')
-      )
-      if (Math.floor(iterations) >= original.length) {
-        clearInterval(ref.current)
-        ref.current = null
-        setter(original)
-        if (onComplete) onComplete()
-      }
-      iterations += 1 / 3
-    }, 30)
-  }, [])
-
-  // Scramble name reveal on mount
-  useEffect(() => {
-    let line1Completed = false
-    let line2Completed = false
-
-    const checkComplete = () => {
-      if (line1Completed && line2Completed) {
-        setNameDone(true)
-      }
-    }
-
-    scramble(setNameLine1, 'John Harold', scramble1Ref, () => {
-      line1Completed = true
-      checkComplete()
-    })
-    scramble(setNameLine2, 'Doton', scramble2Ref, () => {
-      line2Completed = true
-      checkComplete()
-    })
-
-    return () => {
-      if (scramble1Ref.current) clearInterval(scramble1Ref.current)
-      if (scramble2Ref.current) clearInterval(scramble2Ref.current)
-    }
-  }, [scramble])
 
   // Typing effect for role words
   useEffect(() => {
@@ -118,25 +54,16 @@ export default function Hero() {
     return () => clearTimeout(glitchTimer)
   }, [])
 
-  const handleNameClick = useCallback(() => {
-    if (!nameDone) return
-    // #region agent log
-    _dbg('Hero.jsx:handleNameClick', 'scramble triggered', { nameLine1, nameLine2 }, 'H-D')
-    // #endregion
-    scramble(setNameLine1, 'John Harold', scramble1Ref)
-    scramble(setNameLine2, 'Doton', scramble2Ref)
-  }, [nameDone, scramble])
-
   return (
     <section id="hero" ref={heroRef}>
       <div>
         <p className="hero-tag">Portfolio · 2026</p>
-        <h1 id="heroName" className={nameDone ? 'name-flicker' : ''}>
+        <h1 id="heroName" className="name-flicker">
           <span className="sr-only">John Harold Doton</span>
           <span aria-hidden="true">
-            <span id="heroNameLine1" onClick={handleNameClick}>{nameLine1}</span>
+            <HyperText text="John Harold" duration={1800} delay={200} />
             <br />
-            <span id="heroNameLine2" onClick={handleNameClick}>{nameLine2}</span>
+            <HyperText text="Doton" duration={1400} delay={450} />
           </span>
         </h1>
         <p className="hero-sub"><span id="typing">{typedWord}</span></p>
@@ -144,11 +71,22 @@ export default function Hero() {
           Building modern web applications and creative digital experiences.
         </p>
         <div className="hero-row">
-          <a href="#work" className="btn-solid" onClick={(e) => {
-            e.preventDefault()
-            document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' })
-          }}>View projects</a>
-          <a href="/assets/resume.pdf" className="btn-line" download>Resume</a>
+          <InteractiveHoverButton
+            href="#work"
+            onClick={(e) => {
+              e.preventDefault()
+              document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' })
+            }}
+          >
+            View projects
+          </InteractiveHoverButton>
+          <InteractiveHoverButton
+            href="https://drive.google.com/file/d/1e6JNqWsuSjulSiw6UUHZ7uH9UR5Iwpmb/view?usp=sharing"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Resume
+          </InteractiveHoverButton>
         </div>
       </div>
     </section>

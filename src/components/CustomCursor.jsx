@@ -50,7 +50,7 @@ export default function CustomCursor() {
     document.addEventListener('mouseup', onMouseUp)
 
     // Hover detection supporting nested child elements
-    const hoverTargets = 'a, button, .btn-solid, .btn-line, .skill, .tag, .project-card, .project-featured-img, .csoc, input, textarea, .theme-dd-option, .hamburger'
+    const hoverTargets = 'a, button, select, label, [role="button"], input, textarea, .btn-solid, .btn-line, .btn-send, .skill, .tag, .project-card, .proj-card, .sk-cert-card, .exp-item, .project-featured-img, .csoc, .theme-dd-toggle, .theme-dd-option, .hamburger, #heroNameLine1, #heroNameLine2, .terminal-header, .dot, .action-btn, #backToTop, .glass'
     const onMouseOver = (e) => {
       if (e.target.closest(hoverTargets)) {
         dot.classList.add('hover')

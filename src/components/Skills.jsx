@@ -1,7 +1,6 @@
 import { useEffect, useRef, useCallback, useState } from 'react'
 import { ALL_SKILLS } from '../data/skillsData'
-
-
+import { Cloud } from 'react-icon-cloud'
 
 /* ─── Soft Skills data ─────────────────────────────────────────── */
 const SOFT_SKILLS = [
@@ -30,168 +29,62 @@ const SOFT_SKILLS = [
 /* ─── Certifications data ──────────────────────────────────────── */
 const CERTS = [
   {
-    name: 'Google Data Analytics Certificate',
-    issuer: 'Google / Coursera',
-    year: '2024',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg',
-  },
-  {
     name: 'Responsive Web Design',
     issuer: 'freeCodeCamp',
     year: '2023',
     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg',
+    url: 'https://www.freecodecamp.org/certification/haruuowo/responsive-web-design',
   },
   {
-    name: 'JavaScript Algorithms & Data Structures',
+    name: 'Relational Database V8',
     issuer: 'freeCodeCamp',
-    year: '2023',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
-  },
-  {
-    name: 'React – The Complete Guide',
-    issuer: 'Udemy',
-    year: '2024',
-    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+    year: '2025',
+    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
+    url: 'https://www.freecodecamp.org/certification/haruuowo/relational-database-v8',
   },
 ]
 
-/* ─── Fibonacci sphere helper ──────────────────────────────────── */
-function fibonacciSphere(count) {
-  const points = []
-  const golden = Math.PI * (3 - Math.sqrt(5))
-  for (let i = 0; i < count; i++) {
-    const y = 1 - (i / (count - 1)) * 2
-    const r = Math.sqrt(1 - y * y)
-    const theta = golden * i
-    points.push({ x: Math.cos(theta) * r, y, z: Math.sin(theta) * r })
-  }
-  return points
+const cloudOptions = {
+  clickToFront: 500,
+  depth: 0.9,
+  imageScale: 2,
+  initial: [0.1, -0.1],
+  outlineColour: '#0000',
+  reverse: true,
+  tooltip: 'native',
+  tooltipDelay: 0,
+  wheelZoom: false,
+  dragControl: true,
+  noSelect: true,
+  pinchZoom: false,
+  freezeActive: false,
+  minSpeed: 0.008,
+  maxSpeed: 0.03,
 }
 
-/* ─── Sphere sub-component ─────────────────────────────────────── */
-function SkillsSphere({ isSmall }) {
-  const containerRef = useRef(null)
-  const cardRefs = useRef([])
-  const stateRef = useRef({
-    rotX: 0.3, rotY: 0,
-    velX: 0, velY: 0.003,
-    dragging: false, lastX: 0, lastY: 0,
-    hovered: false, raf: null,
-    points: fibonacciSphere(ALL_SKILLS.length),
-    radius: isSmall ? 150 : 210,
-  })
-
-  const getRadius = () => {
-    const w = window.innerWidth
-    if (w < 480) return 100
-    if (w < 768) return 130
-    if (w < 1024) return 150
-    return isSmall ? 150 : 210
-  }
-
-  const project = useCallback(() => {
-    const s = stateRef.current
-    cardRefs.current.forEach((el, i) => {
-      if (!el) return
-      const p = s.points[i]
-      const cosX = Math.cos(s.rotX), sinX = Math.sin(s.rotX)
-      const cosY = Math.cos(s.rotY), sinY = Math.sin(s.rotY)
-      const x1 = p.x * cosY - p.z * sinY
-      const z1 = p.x * sinY + p.z * cosY
-      const y1 = p.y * cosX - z1 * sinX
-      const z2 = p.y * sinX + z1 * cosX
-      const scale = (z2 + 1.8) / 2.8
-      const opacity = 0.25 + scale * 0.75
-      el.style.transform = `translate(-50%,-50%) translate3d(${x1 * s.radius}px,${y1 * s.radius}px,0) scale(${0.55 + scale * 0.55})`
-      el.style.opacity = opacity
-      el.style.zIndex = Math.round(scale * 100)
-      el.style.filter = z2 < -0.2 ? `blur(${(-z2 - 0.2) * 2}px)` : 'none'
-    })
-  }, [])
-
-  const tick = useCallback(() => {
-    const s = stateRef.current
-    if (!s.dragging) {
-      const speedMultiplier = s.hovered ? 0.15 : 1
-      s.rotY += s.velY * speedMultiplier
-      s.rotX = Math.max(-0.6, Math.min(0.6, s.rotX + s.velX * speedMultiplier))
-    }
-    if (s.dragging) { s.velY *= 0.92; s.velX *= 0.92 }
-    project()
-    s.raf = requestAnimationFrame(tick)
-  }, [project])
-
-  const onMouseDown = useCallback((e) => {
-    const s = stateRef.current
-    s.dragging = true; s.lastX = e.clientX; s.lastY = e.clientY
-    if (containerRef.current) containerRef.current.style.cursor = 'grabbing'
-  }, [])
-  const onMouseMove = useCallback((e) => {
-    const s = stateRef.current
-    if (!s.dragging) return
-    const dx = e.clientX - s.lastX; const dy = e.clientY - s.lastY
-    s.velY = dx * 0.006; s.velX = dy * 0.006
-    s.rotY += s.velY; s.rotX += s.velX
-    s.lastX = e.clientX; s.lastY = e.clientY
-  }, [])
-  const onMouseUp = useCallback(() => {
-    stateRef.current.dragging = false
-    if (containerRef.current) containerRef.current.style.cursor = 'grab'
-  }, [])
-  const onTouchStart = useCallback((e) => {
-    const s = stateRef.current
-    s.dragging = true; s.lastX = e.touches[0].clientX; s.lastY = e.touches[0].clientY
-  }, [])
-  const onTouchMove = useCallback((e) => {
-    e.preventDefault()
-    const s = stateRef.current
-    if (!s.dragging) return
-    const dx = e.touches[0].clientX - s.lastX; const dy = e.touches[0].clientY - s.lastY
-    s.velY = dx * 0.006; s.velX = dy * 0.006
-    s.rotY += s.velY; s.rotX += s.velX
-    s.lastX = e.touches[0].clientX; s.lastY = e.touches[0].clientY
-  }, [])
-  const onTouchEnd = useCallback(() => { stateRef.current.dragging = false }, [])
-
-  useEffect(() => {
-    const s = stateRef.current
-    s.radius = getRadius()
-    const onResize = () => { s.radius = getRadius() }
-    window.addEventListener('resize', onResize)
-    window.addEventListener('mouseup', onMouseUp)
-    s.raf = requestAnimationFrame(tick)
-    return () => {
-      if (s.raf) cancelAnimationFrame(s.raf)
-      window.removeEventListener('resize', onResize)
-      window.removeEventListener('mouseup', onMouseUp)
-    }
-  }, [tick, onMouseUp, isSmall])
-
+/* ─── Sphere sub-component (Magic UI react-icon-cloud) ─────────── */
+function SkillsSphere() {
   return (
-    <div
-      ref={containerRef}
-      className="sphere-scene"
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseEnter={() => { stateRef.current.hovered = true }}
-      onMouseLeave={() => { stateRef.current.hovered = false; stateRef.current.dragging = false }}
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-    >
-      <div className="sphere-stage">
-        {ALL_SKILLS.map((skill, i) => (
-          <div
+    <div className="sphere-scene" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '360px' }}>
+      <Cloud options={cloudOptions}>
+        {ALL_SKILLS.map((skill) => (
+          <a
             key={skill.name}
-            ref={el => cardRefs.current[i] = el}
-            className={`sphere-pill${skill.mono ? ' mono' : ''}`}
+            href="#"
+            onClick={(e) => e.preventDefault()}
+            title={`${skill.name} (${skill.years})`}
+            style={{ display: 'inline-block', padding: '10px' }}
           >
-            <img src={skill.icon} alt={skill.name} loading="lazy" draggable={false} />
-            <span>{skill.name}</span>
-          </div>
+            <img
+              src={skill.icon}
+              alt={skill.name}
+              height="42"
+              width="42"
+              style={{ objectFit: 'contain', display: 'block' }}
+            />
+          </a>
         ))}
-      </div>
+      </Cloud>
     </div>
   )
 }
@@ -219,18 +112,36 @@ function SoftSkillsPanel() {
 function CertsPanel() {
   return (
     <div className="sk-panel sk-certs">
-      {CERTS.map((cert, i) => (
-        <div className="sk-cert-card" key={i}>
-          <div className="sk-cert-icon">
-            <img src={cert.icon} alt={cert.issuer} loading="lazy" />
+      {CERTS.map((cert, i) => {
+        const cardInner = (
+          <>
+            <div className="sk-cert-icon">
+              <img src={cert.icon} alt={cert.issuer} loading="lazy" />
+            </div>
+            <div className="sk-cert-info">
+              <p className="sk-cert-name">{cert.name}</p>
+              <p className="sk-cert-meta">{cert.issuer} · {cert.year}</p>
+            </div>
+            <span className="sk-cert-badge">Certified</span>
+          </>
+        )
+
+        return cert.url ? (
+          <a
+            key={i}
+            href={cert.url}
+            target="_blank"
+            rel="noreferrer"
+            className="sk-cert-card"
+          >
+            {cardInner}
+          </a>
+        ) : (
+          <div className="sk-cert-card" key={i}>
+            {cardInner}
           </div>
-          <div className="sk-cert-info">
-            <p className="sk-cert-name">{cert.name}</p>
-            <p className="sk-cert-meta">{cert.issuer} · {cert.year}</p>
-          </div>
-          <span className="sk-cert-badge">Certified</span>
-        </div>
-      ))}
+        )
+      })}
     </div>
   )
 }

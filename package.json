@@ -9,9 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "gsap": "^3.12.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "gsap": "^3.12.7"
+    "react-icon-cloud": "^4.1.7"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",

@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 
 const THEME_META = {
-  dark:   { icon: '●', label: 'Night mode' },
-  white:  { icon: '○', label: 'Day mode' },
+  dark: { icon: '●', label: 'Night mode' },
+  white: { icon: '○', label: 'Day mode' },
   sunset: { icon: '◐', label: 'Sunset mode' },
 }
 
@@ -13,6 +13,8 @@ const NAV_LINKS = [
   { href: '#experience', label: 'Experience' },
   { href: '#contact', label: 'Contact' },
 ]
+
+const RESUME_LINK = '/assets/Harold_Resume.pdf'
 
 export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpen }) {
   const [dropdownOpen, setDropdownOpen] = useState(false)

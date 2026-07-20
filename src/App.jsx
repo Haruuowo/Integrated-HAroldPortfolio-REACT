@@ -12,6 +12,7 @@ import Contact from '@components/Contact'
 import Footer from '@components/Footer'
 import BackToTop from '@components/BackToTop'
 import CustomCursor from '@components/CustomCursor'
+import ScrollProgress from '@components/ScrollProgress'
 
 function App() {
   const [loading, setLoading] = useState(true)
@@ -26,9 +27,10 @@ function App() {
   }, [])
 
   useEffect(() => {
-    document.body.classList.remove('theme-white', 'theme-sunset')
+    document.body.classList.remove('theme-white', 'theme-sunset', 'theme-fuji')
     if (theme === 'white') document.body.classList.add('theme-white')
     if (theme === 'sunset') document.body.classList.add('theme-sunset')
+    if (theme === 'fuji') document.body.classList.add('theme-fuji')
     localStorage.setItem('theme', theme)
   }, [theme])
 
@@ -40,6 +42,7 @@ function App() {
 
   return (
     <>
+      <ScrollProgress />
       <CustomCursor />
       {loading && <Loader />}
       <Header
@@ -62,7 +65,7 @@ function App() {
       </main>
       <Footer />
       <BackToTop />
-      
+
       {/* Floating Terminal Trigger Button */}
       <button
         id="terminalToggle"
