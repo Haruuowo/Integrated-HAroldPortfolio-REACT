@@ -153,7 +153,7 @@ const TABS = [
   { id: 'certs', label: 'Certifications', hint: '' },
 ]
 
-const SKILL_CATS = ['Languages', 'Frameworks', 'Databases', 'Tools', 'Design']
+const SKILL_CATS = ['Languages', 'Tools', 'LLMs', 'Frameworks', 'Design', 'Databases']
 
 export default function Skills() {
   const [activeTab, setActiveTab] = useState('skills')

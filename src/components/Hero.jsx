@@ -59,11 +59,11 @@ export default function Hero() {
       <div>
         <p className="hero-tag">Portfolio · 2026</p>
         <h1 id="heroName" className="name-flicker">
-          <span className="sr-only">John Harold Doton</span>
+          <span className="sr-only">Hello, I'm John Harold</span>
           <span aria-hidden="true">
-            <HyperText text="John Harold" duration={1800} delay={200} />
+            <HyperText text="Hello, I'm" duration={1800} delay={200} />
             <br />
-            <HyperText text="Doton" duration={1400} delay={450} />
+            <HyperText text="John Harold" duration={1400} delay={450} />
           </span>
         </h1>
         <p className="hero-sub"><span id="typing">{typedWord}</span></p>

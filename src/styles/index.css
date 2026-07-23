@@ -920,8 +920,8 @@ body.nav-open {
 #hero h1 {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: clamp(3.5rem, 8vw, 6rem);
-  line-height: 1.02;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 1.08;
   letter-spacing: -.03em;
   color: var(--white);
   margin-bottom: 16px;
@@ -3227,7 +3227,7 @@ footer span {
   }
 
   #hero h1 {
-    font-size: 2.6rem;
+    font-size: 1.9rem;
   }
 
   /* Keep the theme toggle from crowding the logo + hamburger on narrow phoddes */
