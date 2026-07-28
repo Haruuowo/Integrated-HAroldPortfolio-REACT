@@ -57,11 +57,3 @@ To run this project locally:
    npm run build
    ```
 
----
-
-## ☁️ Deployment on Vercel
-
-The portfolio is set up to automatically deploy on Vercel:
-
-1. **Auto-Publishing**: Every time you commit and push code (`git push origin main`), Vercel automatically catches the update, builds the assets, and deploys it live.
-2. **Secure AI Endpoints (Optional)**: If you hook up a live LLM (like Groq) for the Luna AI Vtuber terminal command, add your secure Node.js backend handlers inside the `/api` directory (e.g. `api/chat.js`) to protect your private credentials. Add your keys securely under **Vercel Project Settings -> Environment Variables**.
