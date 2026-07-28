@@ -3846,3 +3846,50 @@ header {
     bottom: 0 !important;
   }
 }
+
+/* ============================================================
+   MOBILE PERFORMANCE OVERRIDES
+   Disable GPU-heavy effects on touch/coarse pointer devices
+   ============================================================ */
+@media (pointer: coarse) {
+
+  /* Remove backdrop-filter blur — most expensive CSS property on mobile GPUs */
+  .skill-cat-card,
+  .glass,
+  .proj-card,
+  .sk-cert-card,
+  .terminal-window,
+  .mobile-nav,
+  header {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Disable hover transforms on touch — they never fire anyway and
+     having them declared still costs paint layers */
+  .skill-cat-card:hover,
+  .skill-tag-pill:hover,
+  .proj-card:hover,
+  .sk-cert-card:hover,
+  .exp-item:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Disable the hero name flicker animation on mobile — saves a repaint layer */
+  #hero h1.name-flicker {
+    animation: none;
+  }
+
+  /* Simplify section background gradients — complex gradients are slow */
+  #hero::before,
+  #hero::after {
+    animation: none;
+    opacity: 0.4;
+  }
+
+  /* Reduce skill card transition cost */
+  .skill-cat-card {
+    transition: border-color 0.2s ease;
+  }
+}

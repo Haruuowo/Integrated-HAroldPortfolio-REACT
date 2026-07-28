@@ -25,16 +25,18 @@ export default function About() {
           if (entry.isIntersecting && !hasAnimated.current) {
             hasAnimated.current = true
 
-            // Use transform + opacity only (no filter:blur — it's GPU-heavy)
+            // BlurFade for the avatar
             gsap.fromTo(avatar,
-              { opacity: 0, y: 24 },
-              { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }
+              { opacity: 0, filter: 'blur(8px)', y: 20 },
+              { opacity: 1, filter: 'blur(0px)', y: 0, duration: 0.8, ease: 'power2.out' }
             )
 
+            // BlurFade for the description text block
             gsap.fromTo(text,
-              { opacity: 0, y: 24 },
+              { opacity: 0, filter: 'blur(8px)', y: 20 },
               {
-                opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.12,
+                opacity: 1, filter: 'blur(0px)', y: 0,
+                duration: 0.8, ease: 'power2.out', delay: 0.15,
                 onComplete: () => setTagsVisible(true)
               }
             )
