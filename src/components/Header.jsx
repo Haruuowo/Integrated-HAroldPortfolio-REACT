@@ -18,7 +18,6 @@ const RESUME_LINK = '/assets/Harold_Resume.pdf'
 
 export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpen }) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState('')
   const [scrolled, setScrolled] = useState(false)
   const dropdownRef = useRef(null)
 
@@ -28,47 +27,10 @@ export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpe
     const handleScroll = () => {
       const isScrolled = window.scrollY > 50
       setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev))
-
-      if (window.scrollY < 50) {
-        setActiveSection('')
-      } else {
-        const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20
-        if (isAtBottom) {
-          setActiveSection('contact')
-        }
-      }
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const sections = document.querySelectorAll('section')
-    if (sections.length === 0) return
-
-    const observerOptions = {
-      root: null,
-      rootMargin: '-160px 0px -50% 0px',
-      threshold: 0,
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // Only update active section if it's not the hero (hero has no nav link)
-          if (entry.target.id === 'hero') {
-            setActiveSection('')
-          } else {
-            setActiveSection(entry.target.id)
-          }
-        }
-      })
-    }, observerOptions)
-
-    sections.forEach((section) => observer.observe(section))
-
-    return () => observer.disconnect()
   }, [])
 
   useEffect(() => {
@@ -114,7 +76,6 @@ export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpe
             <li key={link.href}>
               <a
                 href={link.href}
-                className={activeSection === link.href.slice(1) ? 'active' : ''}
                 onClick={(e) => {
                   e.preventDefault()
                   document.querySelector(link.href)?.scrollIntoView({ behavior: 'smooth' })

@@ -66,7 +66,13 @@ export default function Experience() {
 
         {/* Section header */}
         <div className="sec-head">
-          <h2 className="sec-title">Experience</h2>
+          <h2 className="sec-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="sec-title-icon">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+            </svg>
+            Experience
+          </h2>
         </div>
 
         {/* Two subsections stacked */}

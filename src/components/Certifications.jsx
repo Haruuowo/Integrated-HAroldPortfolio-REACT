@@ -41,7 +41,13 @@ export default function Certifications() {
       <div className="container">
 
         <div className="sec-head">
-          <h2 className="sec-title">Certifications</h2>
+          <h2 className="sec-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="sec-title-icon">
+              <circle cx="12" cy="8" r="7" />
+              <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+            </svg>
+            Certifications
+          </h2>
           <span className="sec-note">Verified credentials</span>
         </div>
 

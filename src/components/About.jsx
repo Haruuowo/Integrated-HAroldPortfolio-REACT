@@ -88,7 +88,13 @@ export default function About() {
     <section id="about" ref={sectionRef}>
       <div className="container">
         <div className="sec-head">
-          <h2 className="sec-title">About</h2>
+          <h2 className="sec-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="sec-title-icon">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+            About Me
+          </h2>
         </div>
         <div className="about-grid">
           <div className="avatar" ref={avatarRef}>
@@ -102,7 +108,7 @@ export default function About() {
             />
           </div>
           <div className="about-body" ref={textRef}>
-            <p className="about-text-desc" style={{ fontSize: '0.88rem', fontWeight: '400', lineHeight: '1.7', color: 'var(--white)', margin: '0 0 24px 0', fontFamily: "'DM Sans', sans-serif" }}>
+            <p className="about-text-desc">
               {FULL_TEXT}
             </p>
             <div className={`tagstrip ${tagsVisible ? 'stagger-in' : ''}`} ref={tagsRef}>

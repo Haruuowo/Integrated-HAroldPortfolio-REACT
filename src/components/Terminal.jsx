@@ -275,15 +275,15 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
   // Build inline style: use dragged position (top/left) or default CSS (bottom/right)
   const windowStyle = pos
     ? {
-        top: `${pos.y}px`,
-        left: `${pos.x}px`,
-        bottom: 'auto',
-        right: 'auto',
-        // While dragged, suppress the CSS transition so it tracks instantly
-        transition: isDragging
-          ? 'border-color 0.4s, box-shadow 0.4s'
-          : 'border-color 0.4s, box-shadow 0.4s, opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
-      }
+      top: `${pos.y}px`,
+      left: `${pos.x}px`,
+      bottom: 'auto',
+      right: 'auto',
+      // While dragged, suppress the CSS transition so it tracks instantly
+      transition: isDragging
+        ? 'border-color 0.4s, box-shadow 0.4s'
+        : 'border-color 0.4s, box-shadow 0.4s, opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+    }
     : {}
 
   return (

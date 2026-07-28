@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import HyperText from './HyperText'
+import TypingAnimation from './TypingAnimation'
 import InteractiveHoverButton from './InteractiveHoverButton'
 
 const WORDS = ['Software Engineer', 'AI/ML Engineer', 'Mobile Developer', 'Full Stack Developer']
@@ -59,12 +59,9 @@ export default function Hero() {
       <div>
         <p className="hero-tag">Portfolio · 2026</p>
         <h1 id="heroName" className="name-flicker">
-          <span className="sr-only">Hello, I'm John Harold</span>
-          <span aria-hidden="true">
-            <HyperText text="Hello, I'm" duration={1800} delay={200} />
-            <br />
-            <HyperText text="John Harold" duration={1400} delay={450} />
-          </span>
+          <TypingAnimation text="Hello, I'm" duration={70} delay={200} />
+          <br />
+          <TypingAnimation text="John Harold" duration={70} delay={1100} />
         </h1>
         <p className="hero-sub"><span id="typing">{typedWord}</span></p>
         <p className="hero-sub" style={{ marginTop: '12px' }}>

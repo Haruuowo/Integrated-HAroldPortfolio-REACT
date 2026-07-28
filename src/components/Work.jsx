@@ -69,7 +69,12 @@ export default function Work() {
         <div className={`proj-header reveal ${visible ? 'visible' : ''}`}>
           <div className="proj-header-left">
             <div className="sec-head" style={{ marginBottom: 0 }}>
-              <h2 className="sec-title">Projects</h2>
+              <h2 className="sec-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="sec-title-icon">
+                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+                </svg>
+                Projects
+              </h2>
               <span className="sec-note">Things I've built</span>
             </div>
             <p className="proj-intro">

@@ -56,7 +56,7 @@ export default function Contact() {
           {/* LEFT */}
           <div className={`contact-left reveal ${visible ? 'visible' : ''}`}>
             <h2 className="contact-hed">
-              Let's build<br />something <em>real.</em>
+              Get in<br />touch with <em>me!</em>
             </h2>
             <p className="contact-sub">
               Open to internships, collaborations, and interesting conversations. I usually reply within a day.

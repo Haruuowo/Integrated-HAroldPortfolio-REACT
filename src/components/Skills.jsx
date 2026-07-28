@@ -162,6 +162,15 @@ export default function Skills() {
   return (
     <section id="skills">
       <div className="container">
+        <div className="sec-head">
+          <h2 className="sec-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="sec-title-icon">
+              <polyline points="16 18 22 12 16 6" />
+              <polyline points="8 6 2 12 8 18" />
+            </svg>
+            Skills
+          </h2>
+        </div>
         {/* Section header with tab switcher */}
         <div className="sk-header">
           <div className="sk-tabs">
