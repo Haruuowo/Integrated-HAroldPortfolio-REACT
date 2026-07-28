@@ -147,16 +147,22 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message: trimmed })
         })
+
+        if (!apiRes.ok) {
+          throw new Error(`HTTP ${apiRes.status}`)
+        }
+
         const apiData = await apiRes.json()
+        const reply = apiData.reply || apiData.error || 'No response received.'
 
         setOutputs(prev => [
           ...prev.slice(0, -1),
-          { type: 'output', text: `🌸 [Luna AI]: ${apiData.reply}` }
+          { type: 'output', text: `🌸 [Luna AI]: ${reply}` }
         ])
       } catch (err) {
         setOutputs(prev => [
           ...prev.slice(0, -1),
-          { type: 'output', text: "🌸 [Luna AI]: *sad vtuber sounds* I lost connection to my brain! Please verify GROQ_API_KEY on Vercel." }
+          { type: 'output', text: "🌸 [Luna AI]: *sad vtuber sounds* I'm only available on the live site! Visit my deployed Vercel URL to chat with me for real~ 🌸" }
         ])
       }
       return
@@ -289,16 +295,22 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: query })
           })
+
+          if (!apiRes.ok) {
+            throw new Error(`HTTP ${apiRes.status}`)
+          }
+
           const apiData = await apiRes.json()
+          const reply = apiData.reply || apiData.error || 'No response received.'
 
           setOutputs(prev => [
             ...prev.slice(0, -1),
-            { type: 'output', text: `🌸 [Luna AI]: ${apiData.reply}` }
+            { type: 'output', text: `🌸 [Luna AI]: ${reply}` }
           ])
         } catch (err) {
           setOutputs(prev => [
             ...prev.slice(0, -1),
-            { type: 'output', text: "🌸 [Luna AI]: *sad sounds* Brain connection failed. Make sure your Vercel GROQ_API_KEY is configured!" }
+            { type: 'output', text: "🌸 [Luna AI]: *sad vtuber sounds* I'm only available on the live site! Visit my deployed Vercel URL to chat with me for real~ 🌸" }
           ])
         }
         return
