@@ -158,6 +158,14 @@ const SKILL_CATS = ['Languages', 'Tools', 'AI & ML', 'Frameworks', 'Design', 'Da
 export default function Skills() {
   const [activeTab, setActiveTab] = useState('skills')
   const [showList, setShowList] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    // Detect touch/coarse pointer device once on mount
+    const coarse = window.matchMedia('(pointer: coarse)').matches
+    const narrow = window.innerWidth < 768
+    setIsMobile(coarse || narrow)
+  }, [])
 
   return (
     <section id="skills">
@@ -191,7 +199,7 @@ export default function Skills() {
               </button>
             ))}
           </div>
-          {activeTab === 'skills' && (
+          {activeTab === 'skills' && !isMobile && (
             <span className="sec-note">drag to spin · hover to slow</span>
           )}
         </div>
@@ -199,30 +207,36 @@ export default function Skills() {
         {/* Panel content — key forces remount → re-triggers fade animation */}
         <div className="sk-content" key={activeTab}>
           {activeTab === 'skills' && (
-            <div className={`skills-container${showList ? ' with-sphere' : ''}`}>
-              <div className="skills-sphere-wrapper" style={{ flexDirection: 'column', gap: '20px' }}>
-                <SkillsSphere isSmall={showList} />
-                {!showList && (
-                  <button
-                    onClick={() => setShowList(true)}
-                    className="sphere-toggle-btn"
-                    style={{ padding: '8px 18px', fontSize: '0.75rem', marginTop: '10px' }}
-                    type="button"
-                  >
-                    Show Proficiency List
-                  </button>
-                )}
-              </div>
-              <div className={`skills-list-wrapper ${showList ? 'visible' : 'hidden'}`}>
+            <div className={`skills-container${showList || isMobile ? ' with-sphere' : ''}`}>
+              {/* On mobile: skip the 3D sphere entirely — it runs a continuous
+                  Canvas animation loop that kills frame rate on phones */}
+              {!isMobile && (
+                <div className="skills-sphere-wrapper" style={{ flexDirection: 'column', gap: '20px' }}>
+                  <SkillsSphere isSmall={showList} />
+                  {!showList && (
+                    <button
+                      onClick={() => setShowList(true)}
+                      className="sphere-toggle-btn"
+                      style={{ padding: '8px 18px', fontSize: '0.75rem', marginTop: '10px' }}
+                      type="button"
+                    >
+                      Show Proficiency List
+                    </button>
+                  )}
+                </div>
+              )}
+              <div className={`skills-list-wrapper ${showList || isMobile ? 'visible' : 'hidden'}`}>
                 <div className="skills-list-header">
                   <h3 className="skills-list-title">TECHNICAL SKILLS</h3>
-                  <button
-                    onClick={() => setShowList(false)}
-                    className="sphere-toggle-btn"
-                    type="button"
-                  >
-                    Hide Details
-                  </button>
+                  {!isMobile && (
+                    <button
+                      onClick={() => setShowList(false)}
+                      className="sphere-toggle-btn"
+                      type="button"
+                    >
+                      Hide Details
+                    </button>
+                  )}
                 </div>
                 <div className="skills-cat-list">
                   {/* Left Column */}
