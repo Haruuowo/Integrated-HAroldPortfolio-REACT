@@ -25,20 +25,50 @@ export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpe
   const meta = THEME_META[theme] || THEME_META.dark
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 50)
-      let cur = ''
-      document.querySelectorAll('section').forEach(s => {
-        if (window.scrollY >= s.offsetTop - 160) cur = s.id
-      })
-      const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 10
-      if (isAtBottom) {
-        cur = 'contact'
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 50
+      setScrolled((prev) => (prev !== isScrolled ? isScrolled : prev))
+
+      if (window.scrollY < 50) {
+        setActiveSection('')
+      } else {
+        const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20
+        if (isAtBottom) {
+          setActiveSection('contact')
+        }
       }
-      setActiveSection(cur)
     }
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const sections = document.querySelectorAll('section')
+    if (sections.length === 0) return
+
+    const observerOptions = {
+      root: null,
+      rootMargin: '-160px 0px -50% 0px',
+      threshold: 0,
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Only update active section if it's not the hero (hero has no nav link)
+          if (entry.target.id === 'hero') {
+            setActiveSection('')
+          } else {
+            setActiveSection(entry.target.id)
+          }
+        }
+      })
+    }, observerOptions)
+
+    sections.forEach((section) => observer.observe(section))
+
+    return () => observer.disconnect()
   }, [])
 
   useEffect(() => {

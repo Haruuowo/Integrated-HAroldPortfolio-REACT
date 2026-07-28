@@ -180,19 +180,19 @@ body {
     background: var(--gold);
     pointer-events: none;
     z-index: 99999;
-    transform: translate(-50%, -50%);
+    transform: translate3d(var(--x), var(--y), 0) translate(-50%, -50%);
     animation: particleFade .6s ease-out forwards;
   }
 
   @keyframes particleFade {
     0% {
       opacity: .8;
-      transform: translate(-50%, -50%) scale(1);
+      transform: translate3d(var(--x), var(--y), 0) translate(-50%, -50%) scale(1);
     }
 
     100% {
       opacity: 0;
-      transform: translate(-50%, -50%) scale(.2);
+      transform: translate3d(var(--x), var(--y), 0) translate(-50%, -50%) scale(.2);
     }
   }
 }

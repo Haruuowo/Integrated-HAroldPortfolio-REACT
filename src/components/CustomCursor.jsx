@@ -25,8 +25,6 @@ export default function CustomCursor() {
 
     const onMouseMove = (e) => {
       mousePos.current = { x: e.clientX, y: e.clientY }
-      dot.style.left = e.clientX + 'px'
-      dot.style.top = e.clientY + 'px'
 
       if (isMoving.current && Math.random() > 0.85) {
         createParticle(e.clientX, e.clientY)
@@ -45,9 +43,9 @@ export default function CustomCursor() {
       ring.classList.remove('click')
     }
 
-    document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('mousedown', onMouseDown)
-    document.addEventListener('mouseup', onMouseUp)
+    document.addEventListener('mousemove', onMouseMove, { passive: true })
+    document.addEventListener('mousedown', onMouseDown, { passive: true })
+    document.addEventListener('mouseup', onMouseUp, { passive: true })
 
     // Hover detection supporting nested child elements
     const hoverTargets = 'a, button, select, label, [role="button"], input, textarea, .btn-solid, .btn-line, .btn-send, .skill, .tag, .project-card, .proj-card, .sk-cert-card, .exp-item, .project-featured-img, .csoc, .theme-dd-toggle, .theme-dd-option, .hamburger, #heroNameLine1, #heroNameLine2, .terminal-header, .dot, .action-btn, #backToTop, .glass'
@@ -60,7 +58,7 @@ export default function CustomCursor() {
         ring.classList.remove('hover')
       }
     }
-    document.addEventListener('mouseover', onMouseOver)
+    document.addEventListener('mouseover', onMouseOver, { passive: true })
 
     // Magnetic buttons
     const magneticBtns = document.querySelectorAll('.btn-solid, .btn-line, .btn-send, .csoc')
@@ -70,23 +68,25 @@ export default function CustomCursor() {
         const rect = btn.getBoundingClientRect()
         const x = e.clientX - rect.left - rect.width / 2
         const y = e.clientY - rect.top - rect.height / 2
-        btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`
-      })
+        btn.style.transform = `translate3d(${x * 0.2}px, ${y * 0.2}px, 0)`
+      }, { passive: true })
       btn.addEventListener('mouseleave', () => {
         btn.style.transform = ''
-      })
+      }, { passive: true })
     })
 
-    // Animate ring
+    // Animate ring and dot
     let animId
-    const animateRing = () => {
+    const animateCursor = () => {
       ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.15
       ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.15
-      ring.style.left = ringPos.current.x + 'px'
-      ring.style.top = ringPos.current.y + 'px'
-      animId = requestAnimationFrame(animateRing)
+      
+      dot.style.transform = `translate3d(${mousePos.current.x}px, ${mousePos.current.y}px, 0) translate(-50%, -50%)`
+      ring.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) translate(-50%, -50%)`
+      
+      animId = requestAnimationFrame(animateCursor)
     }
-    animateRing()
+    animateCursor()
 
     return () => {
       cancelAnimationFrame(animId)
@@ -108,8 +108,8 @@ function createParticle(x, y) {
   const size = 2 + Math.random() * 4
   p.style.width = size + 'px'
   p.style.height = size + 'px'
-  p.style.left = x + 'px'
-  p.style.top = y + 'px'
+  p.style.setProperty('--x', `${x}px`)
+  p.style.setProperty('--y', `${y}px`)
   document.body.appendChild(p)
   setTimeout(() => p.remove(), 600)
 }

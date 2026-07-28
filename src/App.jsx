@@ -35,8 +35,12 @@ function App() {
   }, [theme])
 
   useEffect(() => {
-    const onScroll = () => setShowBackToTop(window.scrollY > 450)
-    window.addEventListener('scroll', onScroll)
+    const onScroll = () => {
+      const shouldShow = window.scrollY > 450
+      setShowBackToTop((prev) => (prev !== shouldShow ? shouldShow : prev))
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -64,7 +68,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
-      <BackToTop />
+      <BackToTop show={showBackToTop} />
 
       {/* Floating Terminal Trigger Button */}
       <button
