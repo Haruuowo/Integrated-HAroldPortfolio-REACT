@@ -81,9 +81,9 @@ export default function Hero() {
             View projects
           </InteractiveHoverButton>
           <InteractiveHoverButton
-            href="https://drive.google.com/file/d/1e6JNqWsuSjulSiw6UUHZ7uH9UR5Iwpmb/view?usp=sharing"
-            target="_blank"
-            rel="noreferrer"
+            href="/assets/Harold_Resume.pdf"
+            download="Harold_Resume.pdf"
+            className="btn-red"
           >
             Resume
           </InteractiveHoverButton>

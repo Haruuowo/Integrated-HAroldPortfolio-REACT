@@ -8,7 +8,7 @@ const COMMAND_LIST = {
   projects: 'List highlighted projects I have worked on',
   contact: 'Print my email, GitHub, and LinkedIn links',
   clear: 'Clear the terminal output screen',
-  matrix: 'Trigger a falling green code screen (press Esc or click to exit)',
+  cat: 'Show my cute virtual cat companion',
   sudo: 'Run command with administrative privileges',
 }
 
@@ -28,7 +28,6 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
   const [outputs, setOutputs] = useState([
     { type: 'header', text: 'john-harold-portfolio v1.0.0 (Type "help" to start)' }
   ])
-  const [matrixActive, setMatrixActive] = useState(false)
 
   // --- Drag state ---
   // pos: null = use CSS default (bottom-right), otherwise {x, y} = left/top in px
@@ -39,7 +38,6 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
   const terminalRef = useRef(null)
   const inputRef = useRef(null)
   const outputEndRef = useRef(null)
-  const canvasRef = useRef(null)
 
   // Reset position when terminal is closed so it returns to default spot
   useEffect(() => {
@@ -65,75 +63,19 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
   // Focus terminal input on container click
   const handleTerminalClick = (e) => {
     e.stopPropagation()
-    if (matrixActive) {
-      setMatrixActive(false)
-    } else {
-      inputRef.current?.focus()
-    }
+    inputRef.current?.focus()
   }
 
   // Close terminal on ESC key if active
   useEffect(() => {
     const handleKeyDownGlobal = (e) => {
-      if (e.key === 'Escape') {
-        if (matrixActive) {
-          setMatrixActive(false)
-        } else if (isOpen) {
-          onClose()
-        }
+      if (e.key === 'Escape' && isOpen) {
+        onClose()
       }
     }
     window.addEventListener('keydown', handleKeyDownGlobal)
     return () => window.removeEventListener('keydown', handleKeyDownGlobal)
-  }, [isOpen, matrixActive, onClose])
-
-  // Handle matrix canvas animation
-  useEffect(() => {
-    if (!matrixActive || !isOpen) return
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    let animationId
-
-    canvas.width = canvas.parentElement.clientWidth
-    canvas.height = canvas.parentElement.clientHeight
-
-    const columns = Math.floor(canvas.width / 16)
-    const drops = Array(columns).fill(1)
-    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝ'
-
-    const draw = () => {
-      ctx.fillStyle = 'rgba(10, 10, 15, 0.08)'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-      ctx.fillStyle = '#0f0'
-      ctx.font = '15px monospace'
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = chars[Math.floor(Math.random() * chars.length)]
-        ctx.fillText(text, i * 16, drops[i] * 16)
-
-        if (drops[i] * 16 > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0
-        }
-        drops[i]++
-      }
-      animationId = requestAnimationFrame(draw)
-    }
-
-    draw()
-
-    const handleResize = () => {
-      canvas.width = canvas.parentElement.clientWidth
-      canvas.height = canvas.parentElement.clientHeight
-    }
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      cancelAnimationFrame(animationId)
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [matrixActive, isOpen])
+  }, [isOpen, onClose])
 
   // ---- Drag logic ----
   const onPointerDown = useCallback((e) => {
@@ -219,19 +161,12 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
           component: (
             <div className="term-skills" style={{ fontFamily: 'monospace', lineHeight: '1.5' }}>
               <p style={{ color: 'var(--gold)', marginBottom: '8px' }}>TECHNICAL PROFICIENCY:</p>
-              {ALL_SKILLS.map(skill => {
-                const barSize = 10
-                const filled = Math.round((skill.pct / 100) * barSize)
-                const empty = barSize - filled
-                const bar = '[' + '='.repeat(filled) + '-'.repeat(empty) + ']'
-                return (
-                  <div key={skill.name} style={{ display: 'grid', gridTemplateColumns: '110px 130px 1fr', gap: '8px', fontSize: '0.78rem' }}>
-                    <span style={{ color: 'var(--white)' }}>{skill.name}</span>
-                    <span style={{ color: 'var(--gold)' }}>{bar}</span>
-                    <span style={{ color: 'var(--muted)' }}>{skill.pct}%</span>
-                  </div>
-                )
-              })}
+              {ALL_SKILLS.map(skill => (
+                <div key={skill.name} style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: '8px', fontSize: '0.78rem' }}>
+                  <span style={{ color: 'var(--white)' }}>▸ {skill.name}</span>
+                  <span style={{ color: 'var(--gold)' }}>{skill.years}</span>
+                </div>
+              ))}
             </div>
           )
         })
@@ -272,9 +207,31 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
         setOutputs([])
         return
 
-      case 'matrix':
-        setMatrixActive(true)
-        response.push({ type: 'output', text: 'Matrix mode active. Press ESC or click anywhere to exit.' })
+      case 'cat':
+        response.push({
+          type: 'output',
+          component: (
+            <div className="term-cat-container" style={{ margin: '10px 0', userSelect: 'none' }}>
+              <p style={{ color: 'var(--gold)', marginBottom: '8px', fontSize: '0.78rem', fontFamily: 'monospace' }}>
+                🐱 visitor@harold-dev:~$ show_cat_companion.jpg
+              </p>
+              <img
+                src="/assets/cat.jpg"
+                alt="Harold's Cat"
+                style={{
+                  maxWidth: '200px',
+                  borderRadius: '6px',
+                  border: '1px solid var(--border)',
+                  display: 'block',
+                  marginBottom: '6px'
+                }}
+              />
+              <p style={{ color: 'var(--dim)', fontSize: '0.75rem', fontFamily: 'monospace' }}>
+                *meow* "Greetings human, welcome to Harold's console!"
+              </p>
+            </div>
+          )
+        })
         break
 
       case 'sudo':
@@ -333,10 +290,9 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
     <div
       ref={terminalRef}
       onClick={handleTerminalClick}
-      className={`terminal-window ${isOpen ? 'open' : ''} ${matrixActive ? 'matrix-mode' : ''} ${isShifted && !pos ? 'shifted-up' : ''}`}
+      className={`terminal-window ${isOpen ? 'open' : ''} ${isShifted && !pos ? 'shifted-up' : ''}`}
       style={windowStyle}
     >
-      {matrixActive && <canvas ref={canvasRef} className="matrix-canvas" />}
 
       {/* Top Title Bar — acts as drag handle */}
       <div

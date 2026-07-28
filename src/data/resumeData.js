@@ -89,7 +89,7 @@ export const TECHNICAL_SKILLS = {
   ai_ml: ['Transformer fine-tuning (Whisper/HuggingFace)', 'Transfer learning', 'RAG', 'TTS pipelines', 'scikit-learn'],
   mobile: ['Android', 'Accessibility Service API', 'Kotlin'],
   tools_platforms: ['Git', 'GitHub', 'Google Colab', 'Node.js', 'whisper.cpp', 'sherpa-onnx'],
-  concepts: ['Data Structures & Algorithms (NeetCode 150)', 'ML theory fundamentals', 'Offline-first architecture'],
+  concepts: ['Data Structures & Algorithms', 'ML theory fundamentals', 'Offline-first architecture'],
 }
 
 export const ADDITIONAL_INFO = {

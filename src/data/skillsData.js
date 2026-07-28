@@ -21,11 +21,10 @@ export const ALL_SKILLS = [
   { name: 'AWS',            cat: 'Tools',      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',                                       years: '1 yr' },
   { name: 'Git & GitHub',   cat: 'Tools',      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',                                                                           years: '3 yrs' },
   { name: 'VS Code',        cat: 'Tools',      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg',                                                                     years: '3 yrs' },
-  // LLMs
-  { name: 'Antigravity',    cat: 'LLMs',       icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg',                                                                     years: '1 mo' },
-  { name: 'Claude',         cat: 'LLMs',       icon: 'https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/claude-color.svg',                                                                           years: '1.5 yrs' },
-  { name: 'Gemini',         cat: 'LLMs',       icon: 'https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/gemini-color.svg',                                                                           years: '1.5 yrs' },
-  { name: 'Kimi (Moonshot)', cat: 'LLMs',       icon: 'https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/kimi-color.svg',                                                                             years: '6 mo' },
+  // AI & ML
+  { name: 'PyTorch',        cat: 'AI & ML',    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',                                                                   years: '1 yr' },
+  { name: 'HuggingFace',    cat: 'AI & ML',    icon: 'https://cdn.jsdelivr.net/npm/@lobehub/icons-static-svg@latest/icons/huggingface-color.svg',                                                                 years: '1 yr' },
+  { name: 'OpenAI & Gemini APIs', cat: 'AI & ML', icon: 'https://api.iconify.design/logos:openai-icon.svg',                                                                        years: '2 yrs' },
   // Design
   { name: 'Figma',          cat: 'Design',     icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg',                                                                       years: '1.5 yrs' },
 ]
