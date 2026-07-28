@@ -2101,3 +2101,17 @@ footer span {
     grid-template-columns: 1fr;
   }
 }
+
+/* Red variant for Interactive Hover Button */
+.interactive-hover-btn.btn-red:hover {
+  border-color: #ef4444;
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.4);
+}
+
+.interactive-hover-btn.btn-red .btn-dot {
+  background: #ef4444;
+}
+
+.interactive-hover-btn.btn-red:hover .btn-hover-content {
+  color: #fff;
+}

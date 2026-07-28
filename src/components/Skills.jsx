@@ -214,13 +214,13 @@ export default function Skills() {
                     const items = ALL_SKILLS.filter(s => s.cat === cat)
                     if (!items.length) return null
                     return (
-                      <div className="skill-cat-group" key={cat}>
-                        <span className="skill-cat-label">{cat}</span>
-                        <div className="skill-cat-items">
+                      <div className="skill-cat-card" key={cat}>
+                        <span className="skill-cat-label-new">{cat}</span>
+                        <div className="skill-cat-pills-wrap">
                           {items.map(skill => (
-                            <div className="skill-cat-row" key={skill.name}>
+                            <div className="skill-tag-pill" key={skill.name} title={`Experience: ${skill.years}`}>
                               <img src={skill.icon} alt={skill.name} className="skill-cat-icon" loading="lazy" />
-                              <span className="skill-cat-name">{skill.name}</span>
+                              <span>{skill.name}</span>
                             </div>
                           ))}
                         </div>
