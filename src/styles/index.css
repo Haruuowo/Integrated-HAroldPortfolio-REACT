@@ -1228,86 +1228,13 @@ section {
   transition: color .4s;
 }
 
-/* The scramble-text paragraph overrides the bold/margin from .about-body p
-   because it uses JetBrains Mono at 500 weight, not the DM Sans bold style */
-.about-body p.about-typed-wrap {
-  font-weight: 500;
-  font-size: 1.02rem;
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  letter-spacing: -.01em;
-  line-height: 1.7;
-  margin-bottom: 0;
-  /* Enough breathing room before the tag strip */
-  margin-bottom: 4px;
-}
-
-.about-typed {
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 1.02rem;
-  font-weight: 500;
-  letter-spacing: -.01em;
-  color: var(--gold);
-  text-shadow: 0 0 6px rgba(232, 217, 184, .35), 0 0 14px rgba(232, 217, 184, .12);
-}
-
-.about-typed strong.typing-current,
-.about-typed strong {
+.about-text-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 400;
+  line-height: 1.75;
   color: var(--white);
-  font-weight: 600;
-  text-shadow: 0 0 8px rgba(255, 255, 255, .25);
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.about-typed-wrap {
-  position: relative;
-  width: 100%;
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 1.02rem;
-  font-weight: 500;
-  letter-spacing: -.01em;
-  line-height: 1.7;
-}
-
-/* Ghost span: invisible clone of the text — holds layout height
-   so the positioned animate span doesn't collapse the parent */
-.about-typed-ghost {
-  display: block;
-  font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 1.02rem;
-  font-weight: 500;
-  letter-spacing: -.01em;
-  line-height: 1.7;
-  opacity: 0;
-  pointer-events: none;
-  user-select: none;
-  white-space: pre-wrap;
-}
-
-/* Animated scramble span — sits absolutely on top of the ghost spacer */
-.about-typed.animate-text {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  display: block;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-  /* Use gold during scramble; GSAP will set the final plain white text */
-  color: var(--gold);
-  font-weight: 500;
-  line-height: 1.7;
-  text-shadow: 0 0 6px rgba(232, 217, 184, .25);
+  margin-bottom: 24px;
 }
 
 .type-cursor {
@@ -1541,18 +1468,34 @@ body:not(.theme-white) .sphere-pill.mono img {
 }
 
 .sk-tabs {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 5px;
+  padding: 4px;
+  min-width: 480px;
+}
+
+.sk-tab-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3);
+  background: var(--gold);
+  border-radius: 999px;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 1;
+  pointer-events: none;
 }
 
 .sk-tab-btn {
   position: relative;
-  padding: 8px 22px;
+  flex: 1;
+  text-align: center;
+  padding: 9px 0;
   border-radius: 999px;
   border: none;
   background: transparent;
@@ -1563,8 +1506,9 @@ body:not(.theme-white) .sphere-pill.mono img {
   text-transform: uppercase;
   color: var(--muted);
   cursor: pointer;
-  transition: color .25s, background .25s;
+  transition: color 0.3s ease;
   white-space: nowrap;
+  z-index: 2;
 }
 
 .sk-tab-btn:hover {
@@ -1572,8 +1516,7 @@ body:not(.theme-white) .sphere-pill.mono img {
 }
 
 .sk-tab-btn.active {
-  background: var(--gold);
-  color: #0a0a0a;
+  color: #0a0a0a !important;
   font-weight: 700;
 }
 
@@ -1731,6 +1674,18 @@ body:not(.theme-white) .sphere-pill.mono img {
   max-height: 100%;
   padding-right: 4px;
   align-items: start;
+}
+
+.skills-grid-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .skills-cat-list {
+    grid-template-columns: 1fr;
+  }
 }
 
 .skill-cat-card {
@@ -1960,12 +1915,13 @@ body:not(.theme-white) .sphere-pill.mono img {
   }
 
   .sk-tabs {
+    min-width: auto;
+    width: 100%;
     padding: 4px;
-    gap: 3px;
   }
 
   .sk-tab-btn {
-    padding: 7px 14px;
+    padding: 8px 0;
     font-size: .65rem;
   }
 }

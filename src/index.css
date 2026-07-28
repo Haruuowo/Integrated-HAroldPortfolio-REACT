@@ -2115,3 +2115,15 @@ footer span {
 .interactive-hover-btn.btn-red:hover .btn-hover-content {
   color: #fff;
 }
+
+.skills-grid-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .skills-cat-list {
+    grid-template-columns: 1fr;
+  }
+}

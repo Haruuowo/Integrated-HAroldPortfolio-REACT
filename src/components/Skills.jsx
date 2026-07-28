@@ -73,7 +73,7 @@ function SkillsSphere() {
             href="#"
             onClick={(e) => e.preventDefault()}
             title={`${skill.name} (${skill.years})`}
-            style={{ display: 'inline-block', padding: '10px' }}
+            style={{ display: 'inline-block', padding: '6px' }}
           >
             <img
               src={skill.icon}
@@ -165,6 +165,12 @@ export default function Skills() {
         {/* Section header with tab switcher */}
         <div className="sk-header">
           <div className="sk-tabs">
+            <div
+              className="sk-tab-indicator"
+              style={{
+                transform: `translateX(calc(${TABS.findIndex(t => t.id === activeTab)} * 100%))`
+              }}
+            />
             {TABS.map(tab => (
               <button
                 key={tab.id}
@@ -210,23 +216,47 @@ export default function Skills() {
                   </button>
                 </div>
                 <div className="skills-cat-list">
-                  {SKILL_CATS.map(cat => {
-                    const items = ALL_SKILLS.filter(s => s.cat === cat)
-                    if (!items.length) return null
-                    return (
-                      <div className="skill-cat-card" key={cat}>
-                        <span className="skill-cat-label-new">{cat}</span>
-                        <div className="skill-cat-pills-wrap">
-                          {items.map(skill => (
-                            <div className="skill-tag-pill" key={skill.name} title={`Experience: ${skill.years}`}>
-                              <img src={skill.icon} alt={skill.name} className="skill-cat-icon" loading="lazy" />
-                              <span>{skill.name}</span>
-                            </div>
-                          ))}
+                  {/* Left Column */}
+                  <div className="skills-grid-col">
+                    {['Languages', 'AI & ML', 'Design'].map(cat => {
+                      const items = ALL_SKILLS.filter(s => s.cat === cat)
+                      if (!items.length) return null
+                      return (
+                        <div className="skill-cat-card" key={cat}>
+                          <span className="skill-cat-label-new">{cat}</span>
+                          <div className="skill-cat-pills-wrap">
+                            {items.map(skill => (
+                              <div className="skill-tag-pill" key={skill.name} title={`Experience: ${skill.years}`}>
+                                <img src={skill.icon} alt={skill.name} className="skill-cat-icon" loading="lazy" />
+                                <span>{skill.name}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    )
-                  })}
+                      )
+                    })}
+                  </div>
+
+                  {/* Right Column */}
+                  <div className="skills-grid-col">
+                    {['Tools', 'Frameworks', 'Databases'].map(cat => {
+                      const items = ALL_SKILLS.filter(s => s.cat === cat)
+                      if (!items.length) return null
+                      return (
+                        <div className="skill-cat-card" key={cat}>
+                          <span className="skill-cat-label-new">{cat}</span>
+                          <div className="skill-cat-pills-wrap">
+                            {items.map(skill => (
+                              <div className="skill-tag-pill" key={skill.name} title={`Experience: ${skill.years}`}>
+                                <img src={skill.icon} alt={skill.name} className="skill-cat-icon" loading="lazy" />
+                                <span>{skill.name}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
             </div>

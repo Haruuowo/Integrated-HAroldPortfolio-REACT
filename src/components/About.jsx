@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { ScrambleTextPlugin } from 'gsap/ScrambleTextPlugin'
-
-gsap.registerPlugin(ScrambleTextPlugin)
 
 const TAGS = ['Software Engineering', 'AI/ML Engineer', 'Frontend Developer', 'Backend Developer']
 
@@ -12,7 +9,6 @@ export default function About() {
   const sectionRef = useRef(null)
   const avatarRef = useRef(null)
   const textRef = useRef(null)
-  const headingRef = useRef(null)
   const tagsRef = useRef(null)
   const [tagsVisible, setTagsVisible] = useState(false)
   const hasAnimated = useRef(false)
@@ -21,8 +17,7 @@ export default function About() {
     const section = sectionRef.current
     const avatar = avatarRef.current
     const text = textRef.current
-    const heading = headingRef.current
-    if (!section || !avatar || !text || !heading) return
+    if (!section || !avatar || !text) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -30,64 +25,51 @@ export default function About() {
           if (entry.isIntersecting && !hasAnimated.current) {
             hasAnimated.current = true
 
-            // Frosted dissolve — blurred static resolves into the real photo
+            // Magic UI style BlurFade for the avatar
             gsap.fromTo(avatar,
               {
                 opacity: 0,
-                filter: 'blur(24px) brightness(1.4) saturate(0)',
-                scale: 1.06,
+                filter: 'blur(8px)',
+                y: 20,
               },
               {
                 opacity: 1,
-                filter: 'blur(0px) brightness(1) saturate(1)',
-                scale: 1,
-                duration: 1.6,
+                filter: 'blur(0px)',
+                y: 0,
+                duration: 0.8,
                 ease: 'power2.out',
               }
             )
 
-            gsap.from(text, {
-              x: 80,
-              opacity: 0,
-              duration: 1.2,
-              ease: 'power3.out',
-              delay: 0.2,
-            })
-
-            // ScrambleText — start from empty string, reveal to full text
-            gsap.fromTo(heading, 
-              { scrambleText: { text: "" } },
+            // Magic UI style BlurFade for the description text block
+            gsap.fromTo(text,
               {
-                duration: 5,          // total reveal time (was 2.5s)
-                scrambleText: {
-                  text: FULL_TEXT,
-                  chars: "lowerCase", // only lowercase — much narrower
-                  revealDelay: 0.6,   // chars stay scrambled longer before locking (was 0.3)
-                  speed: 0.3,         // scramble cycling speed — lower = slower chaos (was 0.6)
-                },
-                ease: "none",
-                delay: 0.5,
-                onStart: () => {
-                  heading.classList.add('scrambling');
-                },
+                opacity: 0,
+                filter: 'blur(8px)',
+                y: 20,
+              },
+              {
+                opacity: 1,
+                filter: 'blur(0px)',
+                y: 0,
+                duration: 0.8,
+                ease: 'power2.out',
+                delay: 0.15,
                 onComplete: () => {
-                  heading.classList.remove('scrambling');
-                  // Switch from gold scramble color to clean white final text
-                  heading.style.color = 'var(--white)';
-                  heading.style.textShadow = 'none';
-                  setTagsVisible(true);
+                  setTagsVisible(true)
                 }
               }
             )
 
+            // Staggered slide up for the tag elements
             if (tagsRef.current) {
               gsap.from(tagsRef.current.children, {
-                y: 20,
+                y: 12,
                 opacity: 0,
-                duration: 0.5,
-                stagger: 0.1,
-                ease: 'power3.out',
-                delay: 5.8, // pushed to match longer scramble (was 3s)
+                duration: 0.4,
+                stagger: 0.08,
+                ease: 'power2.out',
+                delay: 0.3,
               })
             }
 
@@ -95,7 +77,7 @@ export default function About() {
           }
         })
       },
-      { threshold: 0.2 }
+      { threshold: 0.15 }
     )
 
     observer.observe(section)
@@ -120,16 +102,8 @@ export default function About() {
             />
           </div>
           <div className="about-body" ref={textRef}>
-            <p className="about-typed-wrap">
-              <span className="about-typed-ghost" aria-hidden="true">
-                {FULL_TEXT}
-              </span>
-              {/* Start empty — GSAP scrambles in the text, no flash-of-content */}
-              <span
-                ref={headingRef}
-                className="about-typed animate-text"
-                aria-hidden="true"
-              />
+            <p className="about-text-desc" style={{ fontSize: '0.88rem', fontWeight: '400', lineHeight: '1.7', color: 'var(--white)', margin: '0 0 24px 0', fontFamily: "'DM Sans', sans-serif" }}>
+              {FULL_TEXT}
             </p>
             <div className={`tagstrip ${tagsVisible ? 'stagger-in' : ''}`} ref={tagsRef}>
               {TAGS.map((tag) => (
