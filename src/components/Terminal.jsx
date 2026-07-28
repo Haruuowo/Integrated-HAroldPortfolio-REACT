@@ -25,6 +25,7 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
   const [history, setHistory] = useState([])
   const [historyIdx, setHistoryIdx] = useState(-1)
   const [inputVal, setInputVal] = useState('')
+  const [isLunaMode, setIsLunaMode] = useState(false)
   const [outputs, setOutputs] = useState([
     { type: 'header', text: 'john-harold-portfolio v1.0.0 (Type "help" to start)' }
   ])
@@ -122,12 +123,47 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
     dragStartRef.current = null
   }, [])
 
-  const executeCommand = (cmd) => {
-    const trimmed = cmd.trim().toLowerCase()
-    const parts = trimmed.split(' ')
-    const primaryCmd = parts[0]
+  const executeCommand = async (cmd) => {
+    const trimmed = cmd.trim()
+    if (!trimmed) return
 
     let response = []
+
+    if (isLunaMode) {
+      response.push({ type: 'input', text: `luna-ai> ${cmd}` })
+      const query = trimmed.toLowerCase()
+      if (query === 'exit' || query === 'quit') {
+        setIsLunaMode(false)
+        response.push({ type: 'output', text: '🌸 [Luna AI]: Bye-bye! Talk to you later, custom console mode deactivated.' })
+        setOutputs(prev => [...prev, ...response])
+        return
+      }
+
+      setOutputs(prev => [...prev, ...response, { type: 'output', text: '🌸 [Luna AI] is thinking...' }])
+
+      try {
+        const apiRes = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: trimmed })
+        })
+        const apiData = await apiRes.json()
+
+        setOutputs(prev => [
+          ...prev.slice(0, -1),
+          { type: 'output', text: `🌸 [Luna AI]: ${apiData.reply}` }
+        ])
+      } catch (err) {
+        setOutputs(prev => [
+          ...prev.slice(0, -1),
+          { type: 'output', text: "🌸 [Luna AI]: *sad vtuber sounds* I lost connection to my brain! Please verify GROQ_API_KEY on Vercel." }
+        ])
+      }
+      return
+    }
+
+    const parts = trimmed.toLowerCase().split(' ')
+    const primaryCmd = parts[0]
 
     if (primaryCmd) {
       response.push({ type: 'input', text: `visitor@harold-dev:~$ ${cmd}` })
@@ -234,6 +270,40 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
         })
         break
 
+      case 'luna': {
+        const query = cmd.slice(4).trim()
+        setIsLunaMode(true)
+        if (!query) {
+          response.push({
+            type: 'output',
+            text: "🌸 [Luna AI Mode Activated]: Konluna~! Talk to me directly. Type 'exit' to return to system console."
+          })
+          break
+        }
+
+        setOutputs(prev => [...prev, ...response, { type: 'output', text: '🌸 [Luna AI] is thinking...' }])
+
+        try {
+          const apiRes = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: query })
+          })
+          const apiData = await apiRes.json()
+
+          setOutputs(prev => [
+            ...prev.slice(0, -1),
+            { type: 'output', text: `🌸 [Luna AI]: ${apiData.reply}` }
+          ])
+        } catch (err) {
+          setOutputs(prev => [
+            ...prev.slice(0, -1),
+            { type: 'output', text: "🌸 [Luna AI]: *sad sounds* Brain connection failed. Make sure your Vercel GROQ_API_KEY is configured!" }
+          ])
+        }
+        return
+      }
+
       case 'sudo':
         response.push({ type: 'error', text: 'Permission Denied: You are not root... yet.' })
         break
@@ -307,7 +377,7 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
           <span className="dot yellow" />
           <span className="dot green" />
         </div>
-        <div className="terminal-title">visitor@harold-dev:~</div>
+        <div className="terminal-title">{isLunaMode ? 'luna@vtuber-brain:~' : 'visitor@harold-dev:~'}</div>
         <div className="terminal-actions">
           <span className="action-btn min" onClick={(e) => { e.stopPropagation(); onClose(); }} style={{ cursor: 'pointer' }} />
           <span className="action-btn max" />
@@ -328,7 +398,7 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
 
         {/* Input Row */}
         <div className="terminal-row input-row">
-          <span className="prompt">visitor@harold-dev:~$</span>
+          <span className="prompt">{isLunaMode ? 'luna-ai> ' : 'visitor@harold-dev:~$'}</span>
           <input
             ref={inputRef}
             type="text"
