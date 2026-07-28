@@ -5,11 +5,9 @@ export default function CustomCursor() {
   const ringRef = useRef(null)
   const mousePos = useRef({ x: 0, y: 0 })
   const ringPos = useRef({ x: 0, y: 0 })
-  const isMoving = useRef(false)
-  const moveTimeout = useRef(null)
 
   useEffect(() => {
-    // Check if fine pointer (not touch)
+    // Only run on fine pointer (not touch)
     const isFine = window.matchMedia('(pointer: fine)').matches
     if (!isFine) return
 
@@ -23,15 +21,9 @@ export default function CustomCursor() {
     document.body.appendChild(ring)
     ringRef.current = ring
 
+    // Use RAF-throttled mousemove — no particles (saves constant DOM create/destroy)
     const onMouseMove = (e) => {
       mousePos.current = { x: e.clientX, y: e.clientY }
-
-      if (isMoving.current && Math.random() > 0.85) {
-        createParticle(e.clientX, e.clientY)
-      }
-      isMoving.current = true
-      clearTimeout(moveTimeout.current)
-      moveTimeout.current = setTimeout(() => { isMoving.current = false }, 100)
     }
 
     const onMouseDown = () => {
@@ -47,23 +39,28 @@ export default function CustomCursor() {
     document.addEventListener('mousedown', onMouseDown, { passive: true })
     document.addEventListener('mouseup', onMouseUp, { passive: true })
 
-    // Hover detection supporting nested child elements
-    const hoverTargets = 'a, button, select, label, [role="button"], input, textarea, .btn-solid, .btn-line, .btn-send, .skill, .tag, .project-card, .proj-card, .sk-cert-card, .exp-item, .project-featured-img, .csoc, .theme-dd-toggle, .theme-dd-option, .hamburger, #heroNameLine1, #heroNameLine2, .terminal-header, .dot, .action-btn, #backToTop, .glass'
+    // Use mouseover/mouseout but throttled — only check the closest target
+    const hoverTargets = 'a, button, select, label, [role="button"], input, textarea, .btn-solid, .btn-line, .btn-send, .skill, .tag, .project-card, .proj-card, .sk-cert-card, .exp-item, .csoc, .theme-dd-toggle, .theme-dd-option, .hamburger, #backToTop, .glass'
+
     const onMouseOver = (e) => {
       if (e.target.closest(hoverTargets)) {
         dot.classList.add('hover')
         ring.classList.add('hover')
-      } else {
+      }
+    }
+    const onMouseOut = (e) => {
+      if (e.target.closest(hoverTargets)) {
         dot.classList.remove('hover')
         ring.classList.remove('hover')
       }
     }
-    document.addEventListener('mouseover', onMouseOver, { passive: true })
 
-    // Magnetic buttons
+    document.addEventListener('mouseover', onMouseOver, { passive: true })
+    document.addEventListener('mouseout', onMouseOut, { passive: true })
+
+    // Magnetic buttons — lighter, only on buttons with the class
     const magneticBtns = document.querySelectorAll('.btn-solid, .btn-line, .btn-send, .csoc')
     magneticBtns.forEach((btn) => {
-      btn.classList.add('magnetic')
       btn.addEventListener('mousemove', (e) => {
         const rect = btn.getBoundingClientRect()
         const x = e.clientX - rect.left - rect.width / 2
@@ -75,15 +72,26 @@ export default function CustomCursor() {
       }, { passive: true })
     })
 
-    // Animate ring and dot
+    // Single rAF loop — no extra work when mouse hasn't moved
     let animId
+    let lastX = -1
+    let lastY = -1
     const animateCursor = () => {
-      ringPos.current.x += (mousePos.current.x - ringPos.current.x) * 0.15
-      ringPos.current.y += (mousePos.current.y - ringPos.current.y) * 0.15
-      
-      dot.style.transform = `translate3d(${mousePos.current.x}px, ${mousePos.current.y}px, 0) translate(-50%, -50%)`
+      const tx = mousePos.current.x
+      const ty = mousePos.current.y
+
+      // Only update dot if mouse actually moved
+      if (tx !== lastX || ty !== lastY) {
+        lastX = tx
+        lastY = ty
+        dot.style.transform = `translate3d(${tx}px, ${ty}px, 0) translate(-50%, -50%)`
+      }
+
+      // Lerp ring toward mouse
+      ringPos.current.x += (tx - ringPos.current.x) * 0.15
+      ringPos.current.y += (ty - ringPos.current.y) * 0.15
       ring.style.transform = `translate3d(${ringPos.current.x}px, ${ringPos.current.y}px, 0) translate(-50%, -50%)`
-      
+
       animId = requestAnimationFrame(animateCursor)
     }
     animateCursor()
@@ -94,22 +102,11 @@ export default function CustomCursor() {
       document.removeEventListener('mousedown', onMouseDown)
       document.removeEventListener('mouseup', onMouseUp)
       document.removeEventListener('mouseover', onMouseOver)
+      document.removeEventListener('mouseout', onMouseOut)
       dot.remove()
       ring.remove()
     }
   }, [])
 
   return null
-}
-
-function createParticle(x, y) {
-  const p = document.createElement('div')
-  p.className = 'cursor-particle'
-  const size = 2 + Math.random() * 4
-  p.style.width = size + 'px'
-  p.style.height = size + 'px'
-  p.style.setProperty('--x', `${x}px`)
-  p.style.setProperty('--y', `${y}px`)
-  document.body.appendChild(p)
-  setTimeout(() => p.remove(), 600)
 }

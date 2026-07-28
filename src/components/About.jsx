@@ -25,51 +25,24 @@ export default function About() {
           if (entry.isIntersecting && !hasAnimated.current) {
             hasAnimated.current = true
 
-            // Magic UI style BlurFade for the avatar
+            // Use transform + opacity only (no filter:blur — it's GPU-heavy)
             gsap.fromTo(avatar,
-              {
-                opacity: 0,
-                filter: 'blur(8px)',
-                y: 20,
-              },
-              {
-                opacity: 1,
-                filter: 'blur(0px)',
-                y: 0,
-                duration: 0.8,
-                ease: 'power2.out',
-              }
+              { opacity: 0, y: 24 },
+              { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }
             )
 
-            // Magic UI style BlurFade for the description text block
             gsap.fromTo(text,
+              { opacity: 0, y: 24 },
               {
-                opacity: 0,
-                filter: 'blur(8px)',
-                y: 20,
-              },
-              {
-                opacity: 1,
-                filter: 'blur(0px)',
-                y: 0,
-                duration: 0.8,
-                ease: 'power2.out',
-                delay: 0.15,
-                onComplete: () => {
-                  setTagsVisible(true)
-                }
+                opacity: 1, y: 0, duration: 0.7, ease: 'power2.out', delay: 0.12,
+                onComplete: () => setTagsVisible(true)
               }
             )
 
-            // Staggered slide up for the tag elements
             if (tagsRef.current) {
               gsap.from(tagsRef.current.children, {
-                y: 12,
-                opacity: 0,
-                duration: 0.4,
-                stagger: 0.08,
-                ease: 'power2.out',
-                delay: 0.3,
+                y: 10, opacity: 0, duration: 0.35,
+                stagger: 0.07, ease: 'power2.out', delay: 0.25,
               })
             }
 
