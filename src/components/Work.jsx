@@ -3,45 +3,53 @@ import { useEffect, useRef, useState } from 'react'
 const PROJECTS = [
   {
     title: 'Luna AI Vtuber',
+    category: 'Autonomous AI Streamer',
     dates: 'Jan 2025 — Present',
     image: '/assets/FlagProject.png',
-    desc: 'An AI-powered virtual streamer that goes live on Twitch and TikTok with zero human puppeteering. She reacts to events, plays Minecraft, and talks to chat using a custom LLM brain, ElevenLabs voice synthesis, and Groq inference.',
+    desc: 'An AI-powered virtual streamer that goes live on Twitch and TikTok with zero human puppeteering. Features autonomous event reactions, gameplay, and real-time voice chat via custom LLM brains, ElevenLabs synthesis, and Groq inference.',
     tags: ['Python', 'Groq', 'ElevenLabs', 'Node.js', 'Vite', 'React'],
     website: 'https://twitch.tv/luna_ai_vtuber',
     source: 'https://github.com/Haruuowo/AI_VirtualYoutuber',
+    featured: true,
   },
   {
     title: 'ScholarFlow Analytics',
+    category: 'Automated Dashboard',
     dates: 'Sep 2024 — Dec 2024',
     image: '/assets/scholarflow.png',
-    desc: 'Automated dashboard for GDG scholars. Syncs with Google Sheets API to track weekly stats, compute leaderboard rankings, and push updates to Discord.',
-    tags: ['Node.js', 'Google Sheets API', 'Firebase'],
+    desc: 'Automated analytics platform for GDG scholars. Integrates with Google Sheets API to track weekly cohort progression, compute dynamic leaderboard rankings, and broadcast automated updates to Discord.',
+    tags: ['Node.js', 'Google Sheets API', 'Firebase', 'Discord Bot'],
     website: null,
     source: 'https://github.com/Haruuowo/ScholarFlow',
+    featured: false,
   },
   {
     title: 'AetherCraft Autopilot',
+    category: 'Reinforcement Learning',
     dates: 'May 2024 — Aug 2024',
     image: '/assets/aethercraft.png',
-    desc: 'Autonomous reinforcement learning bot that navigates Minecraft environments, gathers resources, and avoids threats using computer vision and pathfinding.',
-    tags: ['Python', 'OpenCV', 'Mineflayer'],
+    desc: 'Autonomous reinforcement learning agent that navigates complex voxel environments, automates resource gathering, and mitigates hazards using computer vision, telemetry loops, and pathfinding algorithms.',
+    tags: ['Python', 'OpenCV', 'Mineflayer', 'Machine Learning'],
     website: null,
-    source: 'https://github.com/john-harold',
+    source: 'https://github.com/Haruuowo',
+    featured: false,
   },
   {
     title: 'HAU CampusNav',
+    category: 'Mobile Indoor Navigation',
     dates: 'Feb 2024 — May 2024',
     image: '/assets/campusnav.png',
-    desc: "Indoor navigation app for Holy Angel University. Uses Dijkstra's algorithm to map the fastest routes across campus halls in real-time.",
-    tags: ['Flutter', 'Dart', 'Figma'],
+    desc: "Indoor campus navigation application for Holy Angel University students. Implements Dijkstra's shortest path algorithm to map optimal routes across multi-floor campus facilities in real-time.",
+    tags: ['Flutter', 'Dart', 'Figma', 'Algorithms'],
     website: null,
-    source: 'https://github.com/john-harold',
+    source: 'https://github.com/Haruuowo',
+    featured: false,
   },
 ]
 
 export default function Work() {
   const sectionRef = useRef(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     const el = sectionRef.current
@@ -135,11 +143,13 @@ export default function Work() {
 
               {/* Card Body */}
               <div className="proj-card-body">
+                <div className="proj-card-header">
+                  <span className="proj-cat-badge">{p.category}</span>
+                  <span className="proj-card-dates">{p.dates}</span>
+                </div>
                 <h4 className="proj-card-title">
                   {p.title}
-                  <span className="proj-card-arrow">↗</span>
                 </h4>
-                <span className="proj-card-dates">{p.dates}</span>
                 <p className="proj-card-desc">{p.desc}</p>
                 <div className="proj-card-tags">
                   {p.tags.map((t) => (
@@ -147,6 +157,36 @@ export default function Work() {
                       {t}
                     </span>
                   ))}
+                </div>
+                <div className="proj-card-actions">
+                  {p.website && (
+                    <a
+                      href={p.website}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="proj-btn proj-btn-live"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                      </svg>
+                      Live Demo ↗
+                    </a>
+                  )}
+                  {p.source && (
+                    <a
+                      href={p.source}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="proj-btn proj-btn-code"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="14" height="14">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                      </svg>
+                      Source Code ↗
+                    </a>
+                  )}
                 </div>
               </div>
             </div>

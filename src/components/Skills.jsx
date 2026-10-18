@@ -157,7 +157,6 @@ const SKILL_CATS = ['Languages', 'Tools', 'AI & ML', 'Frameworks', 'Design', 'Da
 
 export default function Skills() {
   const [activeTab, setActiveTab] = useState('skills')
-  const [showList, setShowList] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -207,37 +206,14 @@ export default function Skills() {
         {/* Panel content — key forces remount → re-triggers fade animation */}
         <div className="sk-content" key={activeTab}>
           {activeTab === 'skills' && (
-            <div className={`skills-container${showList || isMobile ? ' with-sphere' : ''}`}>
-              {/* On mobile: skip the 3D sphere entirely — it runs a continuous
-                  Canvas animation loop that kills frame rate on phones */}
+            <div className="skills-container with-sphere">
               {!isMobile && (
-                <div className="skills-sphere-wrapper" style={{ flexDirection: 'column', gap: '20px' }}>
-                  <SkillsSphere isSmall={showList} />
-                  {!showList && (
-                    <button
-                      onClick={() => setShowList(true)}
-                      className="sphere-toggle-btn"
-                      style={{ padding: '8px 18px', fontSize: '0.75rem', marginTop: '10px' }}
-                      type="button"
-                    >
-                      Show Proficiency List
-                    </button>
-                  )}
+                <div className="skills-sphere-wrapper" style={{ flexDirection: 'column', gap: '12px' }}>
+                  <SkillsSphere />
+                  <span className="sphere-hint-sub">Interactive 3D Tech Cloud</span>
                 </div>
               )}
-              <div className={`skills-list-wrapper ${showList || isMobile ? 'visible' : 'hidden'}`}>
-                <div className="skills-list-header">
-                  <h3 className="skills-list-title">TECHNICAL SKILLS</h3>
-                  {!isMobile && (
-                    <button
-                      onClick={() => setShowList(false)}
-                      className="sphere-toggle-btn"
-                      type="button"
-                    >
-                      Hide Details
-                    </button>
-                  )}
-                </div>
+              <div className="skills-list-wrapper visible">
                 <div className="skills-cat-list">
                   {/* Left Column */}
                   <div className="skills-grid-col">

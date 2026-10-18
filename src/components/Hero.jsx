@@ -1,91 +1,132 @@
-import { useEffect, useRef, useState } from 'react'
-import TypingAnimation from './TypingAnimation'
 import InteractiveHoverButton from './InteractiveHoverButton'
 
-const WORDS = ['Software Engineer', 'AI/ML Engineer', 'Mobile Developer', 'Full Stack Developer']
+const SOCIALS = [
+  {
+    label: 'GitHub',
+    href: 'https://github.com/Haruuowo',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+      </svg>
+    ),
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://linkedin.com/in/harold-doton-606b18317',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+        <rect x="2" y="9" width="4" height="12" />
+        <circle cx="4" cy="4" r="2" />
+      </svg>
+    ),
+  },
+  {
+    label: 'Email',
+    href: 'mailto:harolddoton@gmail.com',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m22 7-10 6L2 7" />
+      </svg>
+    ),
+  },
+]
+
+const FOCUS = ['AI Agents', 'Full-Stack Web', 'Computer Vision']
 
 export default function Hero() {
-  const heroRef = useRef(null)
-  const [typedWord, setTypedWord] = useState('')
-  const [wordIndex, setWordIndex] = useState(0)
-  const [charIndex, setCharIndex] = useState(0)
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  // Typing effect for role words
-  useEffect(() => {
-    const w = WORDS[wordIndex]
-    const delay = isDeleting ? 45 : 95
-    const pause = isDeleting ? 0 : (charIndex === w.length ? 1800 : 0)
-
-    const timer = setTimeout(() => {
-      if (!isDeleting && charIndex < w.length) {
-        setTypedWord(w.slice(0, charIndex + 1))
-        setCharIndex(charIndex + 1)
-      } else if (isDeleting && charIndex > 0) {
-        setTypedWord(w.slice(0, charIndex - 1))
-        setCharIndex(charIndex - 1)
-      } else if (!isDeleting && charIndex === w.length) {
-        setIsDeleting(true)
-      } else if (isDeleting && charIndex === 0) {
-        setIsDeleting(false)
-        setWordIndex((wordIndex + 1) % WORDS.length)
-      }
-    }, delay + pause)
-
-    return () => clearTimeout(timer)
-  }, [charIndex, isDeleting, wordIndex])
-
-  // VHS glitch effect
-  useEffect(() => {
-    const hero = heroRef.current
-    if (!hero) return
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (prefersReduced) return
-
-    let glitchTimer
-    const scheduleGlitch = () => {
-      glitchTimer = setTimeout(() => {
-        hero.classList.add('vhs-glitch')
-        setTimeout(() => hero.classList.remove('vhs-glitch'), 400)
-        scheduleGlitch()
-      }, 4000 + Math.random() * 5000)
-    }
-    scheduleGlitch()
-    return () => clearTimeout(glitchTimer)
-  }, [])
-
   return (
-    <section id="hero" ref={heroRef}>
-      <div>
-        <p className="hero-tag">Portfolio · 2026</p>
-        <h1 id="heroName" className="name-flicker">
-          <TypingAnimation text="Hello, I'm" duration={70} delay={200} />
-          <br />
-          <TypingAnimation text="John Harold" duration={70} delay={1100} />
-        </h1>
-        <p className="hero-sub"><span id="typing">{typedWord}</span></p>
-        <p className="hero-sub" style={{ marginTop: '12px' }}>
-          Building modern web applications and creative digital experiences.
-        </p>
-        <div className="hero-row">
-          <InteractiveHoverButton
-            href="#work"
-            onClick={(e) => {
-              e.preventDefault()
-              document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' })
-            }}
-          >
-            View projects
-          </InteractiveHoverButton>
-          <InteractiveHoverButton
-            href="/assets/Harold_Resume.pdf"
-            download="Harold_Resume.pdf"
-            className="btn-red"
-          >
-            Resume
-          </InteractiveHoverButton>
+    <section id="hero">
+      <div className="hero-container">
+        <div className="hero-left">
+          <p className="hero-eyebrow">
+            <span className="hero-eyebrow-line" />
+            Computer Science · Holy Angel University
+          </p>
+
+          <h1 id="heroName">
+            Hi, I'm <span className="hero-highlight">John Harold</span>
+            <span className="hero-h1-sub">I build intelligent software.</span>
+          </h1>
+
+          <p className="hero-sub">
+            I turn imaginative ideas into autonomous AI agents, machine learning
+            pipelines, and clean, dependable web experiences.
+          </p>
+
+          <ul className="hero-focus">
+            {FOCUS.map((f) => (
+              <li key={f}>{f}</li>
+            ))}
+          </ul>
+
+          <div className="hero-row">
+            <InteractiveHoverButton
+              href="#work"
+              onClick={(e) => {
+                e.preventDefault()
+                document.querySelector('#work')?.scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              Explore Projects
+            </InteractiveHoverButton>
+            <InteractiveHoverButton
+              href="/assets/Harold_Resume.pdf"
+              download="Harold_Resume.pdf"
+              className="btn-red"
+            >
+              Download CV
+            </InteractiveHoverButton>
+          </div>
+
+          <div className="hero-socials">
+            {SOCIALS.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target={s.href.startsWith('http') ? '_blank' : undefined}
+                rel="noreferrer"
+                aria-label={s.label}
+                title={s.label}
+                className="hero-social"
+              >
+                {s.icon}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <div className="hero-right" aria-hidden="false">
+          <div className="hero-portrait">
+            <div className="hero-portrait-frame">
+              <img
+                src="/assets/HAROLDPHOTO1.jpg"
+                alt="Portrait of John Harold Doton"
+                onError={(e) => { e.currentTarget.style.display = 'none' }}
+              />
+            </div>
+
+            <div className="hero-chip hero-chip-a">
+              <span className="hero-chip-label">Currently building</span>
+              <span className="hero-chip-value">Luna AI Vtuber</span>
+            </div>
+            <div className="hero-chip hero-chip-b">
+              <span className="hero-chip-label">Studying</span>
+              <span className="hero-chip-value">BS Computer Science</span>
+            </div>
+            <div className="hero-chip hero-chip-c">
+              <span className="hero-chip-label">Leading</span>
+              <span className="hero-chip-value">GDG on Campus · HAU</span>
+            </div>
+          </div>
         </div>
       </div>
+
+      <a href="#about" className="hero-scroll" aria-label="Scroll to About">
+        <span>Scroll</span>
+        <i />
+      </a>
     </section>
   )
 }

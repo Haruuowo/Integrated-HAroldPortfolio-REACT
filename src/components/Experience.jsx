@@ -6,17 +6,25 @@ const EDUCATION = [
     company: 'Holy Angel University',
     date: 'January 2025 — Present',
     logo: '/assets/hau.png',
-    desc: 'A Computer Science student with a passion for software development and technology.',
+    desc: 'Undergraduate study focused on artificial intelligence, systems software, and modern software engineering principles.',
+    bullets: [
+      'Focusing on artificial intelligence, algorithmic design, and full-stack software development.',
+      'Active member in campus technical communities and student development circles.',
+    ],
   },
 ]
 
 const EXPERIENCE_ITEMS = [
   {
     title: 'Internal Relations Officer',
-    company: 'GDG on Campus · Holy Angel University',
+    company: 'Google Developer Groups on Campus · HAU',
     date: 'July 2024 — April 2025',
     logo: '/assets/gdg.jpg',
-    desc: 'Handled the internal relations of the organization for GDG on Campus - Holy Angel University.',
+    desc: 'Coordinated communications and cross-functional collaboration within the student developer organization.',
+    bullets: [
+      'Facilitated inter-team communication and alignment for campus-wide tech workshops and dev sessions.',
+      'Assisted in planning and executing hackathons, tech talks, and Google Developer technologies showcases.',
+    ],
   },
 ]
 
@@ -24,7 +32,15 @@ function ExpCard({ item }) {
   return (
     <div className="exp-item">
       <div className="exp-logo-wrap">
-        <img src={item.logo} alt={`${item.company} Logo`} loading="lazy" />
+        <img
+          src={item.logo}
+          alt={`${item.company} Logo`}
+          loading="lazy"
+          onError={(e) => {
+            e.target.style.display = 'none'
+            e.target.parentElement.textContent = 'HAU'
+          }}
+        />
       </div>
       <div className="exp-content">
         <div className="exp-header">
@@ -33,6 +49,13 @@ function ExpCard({ item }) {
         </div>
         <span className="exp-company">{item.company}</span>
         <p className="exp-desc">{item.desc}</p>
+        {item.bullets && item.bullets.length > 0 && (
+          <ul className="exp-bullets">
+            {item.bullets.map((b, i) => (
+              <li key={i}>{b}</li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   )

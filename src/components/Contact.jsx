@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 export default function Contact() {
   const sectionRef = useRef(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
   const [formStatus, setFormStatus] = useState('')
   const [formStatusType, setFormStatusType] = useState('')
 
@@ -56,10 +56,10 @@ export default function Contact() {
           {/* LEFT */}
           <div className={`contact-left reveal ${visible ? 'visible' : ''}`}>
             <h2 className="contact-hed">
-              Get in<br />touch with <em>me!</em>
+              Get in touch with <span className="gold-accent">me</span>
             </h2>
             <p className="contact-sub">
-              Open to internships, collaborations, and interesting conversations. I usually reply within a day.
+              Open to internships, engineering roles, collaborations, and tech discussions. I typically respond within 24 hours.
             </p>
 
             <div className="contact-info-list">

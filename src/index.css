@@ -90,97 +90,24 @@ body {
   transition: background .4s, color .4s;
 }
 
-/* ---------- CUSTOM CURSOR ---------- */
-@media (pointer: fine) {
-
-  *,
-  *::before,
-  *::after {
-    cursor: none !important;
-  }
-
-  #cursor-dot,
-  #cursor-ring {
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 100000;
-    transform: translate(-50%, -50%);
-  }
-
-  #cursor-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-    transition: width .18s, height .18s, background .18s, opacity .18s;
-  }
-
-  #cursor-ring {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1px solid var(--gold);
-    opacity: .55;
-    transition: width .2s, height .2s, opacity .2s, border-color .2s;
-  }
-
-  #cursor-dot.hover {
-    width: 10px;
-    height: 10px;
-  }
-
-  #cursor-ring.hover {
-    width: 48px;
-    height: 48px;
-    opacity: .3;
-  }
-
-  #cursor-dot.click {
-    width: 8px;
-    height: 8px;
-    background: var(--white);
-  }
-
-  #cursor-ring.click {
-    width: 26px;
-    height: 26px;
-    opacity: .8;
-  }
-
-  .cursor-particle {
-    position: fixed;
-    top: 0;
-    left: 0;
-    border-radius: 50%;
-    background: var(--gold);
-    pointer-events: none;
-    z-index: 99999;
-    transform: translate3d(var(--x), var(--y), 0) translate(-50%, -50%);
-    animation: particleFade .6s ease-out forwards;
-  }
-
-  @keyframes particleFade {
-    0% {
-      opacity: .8;
-      transform: translate3d(var(--x), var(--y), 0) translate(-50%, -50%) scale(1);
-    }
-
-    100% {
-      opacity: 0;
-      transform: translate3d(var(--x), var(--y), 0) translate(-50%, -50%) scale(.2);
-    }
-  }
+/* ---------- NATIVE CURSOR & INTERACTION ---------- */
+button,
+a,
+[role="button"],
+.btn-solid,
+.btn-red,
+.interactive-hover-btn,
+.theme-dd-toggle,
+.theme-dd-option,
+.sk-tab-btn,
+.proj-link-badge,
+.csoc {
+  cursor: pointer;
 }
 
-@media (pointer: coarse) {
-
-  #cursor-dot,
-  #cursor-ring,
-  .cursor-particle {
-    display: none;
-  }
+input,
+textarea {
+  cursor: text;
 }
 
 /* ---------- THEME DROPDOWN ---------- */

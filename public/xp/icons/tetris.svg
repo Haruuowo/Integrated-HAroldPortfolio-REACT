@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <filter id="blockShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="1" dy="2" stdDeviation="1" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+  <!-- Background Badge -->
+  <rect x="2" y="2" width="44" height="44" rx="8" fill="#1b1c2e" stroke="#3d406b" stroke-width="2"/>
+  <!-- T-piece purple/magenta -->
+  <g filter="url(#blockShadow)">
+    <rect x="18" y="8" width="10" height="10" rx="1.5" fill="#a855f7" stroke="#d8b4fe" stroke-width="1.2"/>
+    <rect x="8" y="18" width="10" height="10" rx="1.5" fill="#a855f7" stroke="#d8b4fe" stroke-width="1.2"/>
+    <rect x="18" y="18" width="10" height="10" rx="1.5" fill="#9333ea" stroke="#d8b4fe" stroke-width="1.2"/>
+    <rect x="28" y="18" width="10" height="10" rx="1.5" fill="#a855f7" stroke="#d8b4fe" stroke-width="1.2"/>
+  </g>
+  <!-- O-piece yellow -->
+  <g filter="url(#blockShadow)">
+    <rect x="8" y="28" width="10" height="10" rx="1.5" fill="#eab308" stroke="#fef08a" stroke-width="1.2"/>
+    <rect x="18" y="28" width="10" height="10" rx="1.5" fill="#eab308" stroke="#fef08a" stroke-width="1.2"/>
+    <rect x="8" y="38" width="10" height="10" rx="1.5" fill="#ca8a04" stroke="#fef08a" stroke-width="1.2"/>
+    <rect x="18" y="38" width="10" height="10" rx="1.5" fill="#ca8a04" stroke="#fef08a" stroke-width="1.2"/>
+  </g>
+  <!-- L-piece orange/cyan -->
+  <g filter="url(#blockShadow)">
+    <rect x="28" y="28" width="10" height="10" rx="1.5" fill="#06b6d4" stroke="#a5f3fc" stroke-width="1.2"/>
+    <rect x="28" y="38" width="10" height="10" rx="1.5" fill="#0891b2" stroke="#a5f3fc" stroke-width="1.2"/>
+    <rect x="38" y="38" width="10" height="10" rx="1.5" fill="#06b6d4" stroke="#a5f3fc" stroke-width="1.2"/>
+  </g>
+</svg>
