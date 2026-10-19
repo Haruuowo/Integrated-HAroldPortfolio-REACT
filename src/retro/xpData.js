@@ -200,6 +200,28 @@ export const INITIAL_FILESYSTEM = {
               ]
             },
             {
+              id: 'proj-smartsort',
+              name: 'SmartSort_Organizer',
+              path: 'C:\\Documents and Settings\\Harold\\My Documents\\Projects\\SmartSort_Organizer',
+              type: 'folder',
+              icon: 'folder',
+              children: [
+                { id: 'ss-readme', name: 'README.txt', type: 'text', content: 'SmartSort: An intelligent, rule-based desktop file organizer built with Python and CustomTkinter.' },
+                { id: 'ss-gh', name: 'GitHub_Repository.url', type: 'link', url: 'https://github.com/Haruuowo/SmartSort' }
+              ]
+            },
+            {
+              id: 'proj-procastimate',
+              name: 'Procastimate_Flutter_App',
+              path: 'C:\\Documents and Settings\\Harold\\My Documents\\Projects\\Procastimate_Flutter_App',
+              type: 'folder',
+              icon: 'folder',
+              children: [
+                { id: 'pc-readme', name: 'README.txt', type: 'text', content: 'Procastimate App: Cross-platform mobile focus companion engineered with Flutter and Dart.' },
+                { id: 'pc-gh', name: 'GitHub_Repository.url', type: 'link', url: 'https://github.com/Haruuowo/procastimate_app' }
+              ]
+            },
+            {
               id: 'proj-campusnav',
               name: 'HAU_CampusNav',
               path: 'C:\\Documents and Settings\\Harold\\My Documents\\Projects\\HAU_CampusNav',

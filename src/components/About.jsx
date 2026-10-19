@@ -52,7 +52,7 @@ export default function About() {
           <figure className="about-photo">
             <div className="about-photo-frame">
               <img
-                src="/assets/HAROLDPHOTO1.jpg"
+                src="/assets/PHOTO.jpg"
                 alt="John Harold Doton"
                 loading="lazy"
                 onError={(e) => { e.currentTarget.style.display = 'none' }}
