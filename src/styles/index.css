@@ -671,6 +671,37 @@ nav a.active::after {
   color: var(--gold);
 }
 
+.mobile-nav-retro-wrap {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.mobile-nav-retro-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 18px;
+  background: rgba(232, 217, 184, 0.08);
+  border: 1px solid var(--bdgold);
+  border-radius: 999px;
+  color: var(--gold);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-retro-btn:hover {
+  background: var(--gold);
+  color: #0a0a0f;
+  box-shadow: 0 0 16px rgba(232, 217, 184, 0.4);
+}
+
 body.nav-open {
   overflow: hidden;
 }
@@ -1100,12 +1131,27 @@ body.nav-open {
 @media (max-width: 960px) {
   .hero-container {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 40px;
   }
-  .hero-portrait { width: min(100%, 300px); margin: 0 auto; }
-  .hero-chip-a { left: -8px; }
-  .hero-chip-b { right: -8px; }
-  .hero-chip-c { left: -4px; }
+  .hero-portrait {
+    width: min(100%, 280px);
+    margin: 0 auto;
+  }
+  .hero-portrait::before {
+    inset: 10px -8px -8px 8px;
+  }
+  .hero-chip {
+    padding: 6px 12px;
+  }
+  .hero-chip-label {
+    font-size: 0.58rem;
+  }
+  .hero-chip-value {
+    font-size: 0.78rem;
+  }
+  .hero-chip-a { top: 4%; left: -6px; }
+  .hero-chip-b { bottom: 20%; right: -6px; }
+  .hero-chip-c { bottom: 4%; left: -2px; }
   .hero-scroll { display: none; }
 }
 
@@ -1727,7 +1773,8 @@ body:not(.theme-white) .sphere-pill.mono img {
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 4px;
-  min-width: 480px;
+  width: 100%;
+  max-width: 480px;
 }
 
 .sk-tab-indicator {
@@ -2065,7 +2112,7 @@ body:not(.theme-white) .sphere-pill.mono img {
 
 .sk-certs {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
   gap: 16px;
 }
 
@@ -3399,7 +3446,7 @@ footer span {
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 860px) {
   header {
-    padding: 14px 24px;
+    padding: 12px 18px;
   }
 
   nav {
@@ -3410,12 +3457,38 @@ footer span {
     display: flex;
   }
 
+  /* Keep the theme toggle from crowding the header on tablet and mobile */
+  .theme-dd-toggle {
+    min-width: 0;
+    padding: 0 9px;
+  }
+
+  .theme-dd-label {
+    display: none;
+  }
+
+  .theme-dd-icon {
+    margin-right: 0;
+  }
+
+  .retro-os-toggle-btn {
+    padding: 0 10px;
+    height: 30px;
+    font-size: 0.72rem;
+    gap: 5px;
+  }
+
+  .nav-right {
+    gap: 8px;
+  }
+
   section {
-    padding: 64px 24px;
+    padding: 60px 18px;
   }
 
   #hero {
-    padding: 120px 24px 60px;
+    padding: 96px 18px 50px;
+    min-height: auto;
   }
 
   .about-grid {
@@ -3433,46 +3506,50 @@ footer span {
   .tagstrip {
     justify-content: center;
   }
-
-
 }
 
 @media (max-width: 500px) {
   .hero-row {
     flex-direction: column;
+    width: 100%;
+    align-items: stretch;
   }
 
+  .hero-row .interactive-hover-btn,
   .btn-solid,
   .btn-line {
     width: 100%;
+    max-width: 320px;
     text-align: center;
+    margin: 0 auto;
   }
 
   #hero h1 {
-    font-size: 1.9rem;
+    font-size: clamp(1.75rem, 6.5vw, 2.2rem);
   }
 
-  /* Keep the theme toggle from crowding the logo + hamburger on narrow phoddes */
-  .theme-dd-toggle {
-    min-width: 0;
-    padding: 0 10px;
+  .hero-eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    gap: 8px;
+    flex-wrap: wrap;
   }
 
-  .theme-dd-label {
-    display: none;
+  .hero-eyebrow-line {
+    width: 22px;
   }
 
-  .theme-dd-icon {
-    margin-right: 0;
+  .hero-portrait {
+    width: min(100%, 250px);
   }
 
-  .nav-right {
-    gap: 10px;
-  }
+  .hero-chip-a { left: 0; }
+  .hero-chip-b { right: 0; }
+  .hero-chip-c { left: 0; }
 
   .mobile-nav {
     width: 100%;
-    padding: 80px 24px 24px;
+    padding: 80px 20px 24px;
   }
 
   .tl-item {
@@ -4204,8 +4281,8 @@ body.theme-white .proj-cta-github:hover {
     font-size: .85rem;
   }
 
-  .proj-card {
-    padding: 20px 18px;
+  .proj-card-body {
+    padding: 18px 16px;
   }
 
   .proj-hero {
@@ -4471,8 +4548,8 @@ body.theme-white .proj-cta-github:hover {
 
 @media (max-width: 640px) {
   #terminalToggle {
-    bottom: 24px;
-    right: 24px;
+    bottom: 20px;
+    right: 20px;
     left: auto;
     width: 44px;
     height: 44px;
@@ -4480,7 +4557,14 @@ body.theme-white .proj-cta-github:hover {
   }
 
   #terminalToggle.shifted-up {
-    bottom: 80px;
+    bottom: 74px;
+  }
+
+  #backToTop {
+    bottom: 20px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
   }
 
   .terminal-window {

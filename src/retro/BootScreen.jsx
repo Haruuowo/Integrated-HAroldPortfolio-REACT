@@ -77,7 +77,7 @@ export default function BootScreen({ onSelectMode }) {
         <div className="xp-boot-header">
           <div className="bios-row title">
             <span className="bios-brand">HAROLD BIOS v4.02</span>
-            <span className="bios-copy">(C) 2004-2026 Harold Doton Systems</span>
+            <span className="bios-copy">(C) 2004-{new Date().getFullYear()} Harold Doton Systems</span>
           </div>
           <div className="bios-divider">---------------------------------------------------------------------------------</div>
           <div className="bios-row info">

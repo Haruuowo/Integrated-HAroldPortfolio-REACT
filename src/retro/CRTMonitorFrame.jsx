@@ -30,7 +30,27 @@ export default function CRTMonitorFrame({ children, onSwitchToClassic, onOpenBoo
 
   return (
     <div className={`crt-desk-environment ${isMonitorMode ? 'with-crt-frame' : 'borderless-mode'}`}>
-
+      {/* Top Floating Return Bar */}
+      <header className="crt-top-nav-bar">
+        <button
+          type="button"
+          className="crt-return-portfolio-btn"
+          onClick={onSwitchToClassic}
+          title="Return to Modern Portfolio"
+        >
+          ← Return to Portfolio
+        </button>
+        {onOpenBootScreen && (
+          <button
+            type="button"
+            className="crt-boot-btn"
+            onClick={onOpenBootScreen}
+            title="Open Boot Options"
+          >
+            Boot Screen
+          </button>
+        )}
+      </header>
 
       {/* Retro CRT Physical Monitor Chassis */}
       <div className={`crt-monitor-chassis ${isDegaussing ? 'degauss-active' : ''}`}>
@@ -82,6 +102,16 @@ export default function CRTMonitorFrame({ children, onSwitchToClassic, onOpenBoo
 
           {/* Right Tactile Buttons & Indicators */}
           <div className="crt-buttons-cluster">
+            {/* Return to Classic Portfolio Button */}
+            <button
+              type="button"
+              className="crt-hardware-btn exit-btn"
+              onClick={() => { playTerminalClick(); onSwitchToClassic && onSwitchToClassic(); }}
+              title="Exit and Return to Modern Portfolio"
+            >
+              <span className="hw-label">PORTFOLIO</span>
+            </button>
+
             {/* Degauss Button */}
             <button
               type="button"

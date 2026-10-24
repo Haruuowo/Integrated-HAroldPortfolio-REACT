@@ -59,6 +59,7 @@ export default function ClassicPortfolio({ onSwitchToRetro, onOpenBootScreen }) 
       <MobileNav
         isOpen={mobileNavOpen}
         onClose={() => setMobileNavOpen(false)}
+        onSwitchToRetro={onSwitchToRetro}
       />
       <main>
         <Hero />

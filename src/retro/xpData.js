@@ -105,7 +105,7 @@ combines real engineering rigor with creative utility.
 LEADERSHIP & AFFILIATIONS:
 --------------------------------------------------
 * Internal Relations Officer — GDG on Campus HAU (2024 - 2025)
-* BS Computer Science — Holy Angel University (Expected 2025)
+* BS Computer Science — Holy Angel University (2023 - Present)
 
 CORE FOCUS AREAS:
 --------------------------------------------------

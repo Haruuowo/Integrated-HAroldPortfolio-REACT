@@ -31,7 +31,9 @@ const DEFAULT_DESKTOP_ICONS = [
   { id: 'switch', title: 'Switch to Web', icon: '/xp/icons/earth.png', action: 'switch', x: 224, y: 302 }
 ]
 
-export default function RetroPC({ onSwitchToClassic }) {
+export default function RetroPC({ onSwitchToClassic, embedded = false, onExpandFullscreen }) {
+  const containerRef = useRef(null)
+
   // Wallpaper state with localStorage persistence
   const [currentWallpaper, setCurrentWallpaper] = useState(() => {
     const saved = localStorage.getItem('xp_wallpaper')
@@ -41,41 +43,30 @@ export default function RetroPC({ onSwitchToClassic }) {
     return WALLPAPERS[0]
   })
 
-  // 3-click switch to modern web portfolio state
-  const [switchClicks, setSwitchClicks] = useState(0)
-  const switchTimerRef = useRef(null)
-
+  // Instant 1-click switch to modern web portfolio
   const handleSwitchToClassicClick = () => {
-    const next = switchClicks + 1
-    if (next >= 3) {
-      setSwitchClicks(0)
-      if (switchTimerRef.current) clearTimeout(switchTimerRef.current)
-      if (onSwitchToClassic) onSwitchToClassic()
-    } else {
-      setSwitchClicks(next)
-      if (switchTimerRef.current) clearTimeout(switchTimerRef.current)
-      switchTimerRef.current = setTimeout(() => {
-        setSwitchClicks(0)
-      }, 4000)
-    }
+    if (onSwitchToClassic) onSwitchToClassic()
   }
 
-  // Windows manager state - default to authentic Internet Explorer
-  const [windows, setWindows] = useState({
-    ie: {
-      id: 'ie',
-      title: 'Internet Explorer - Harold Doton Portfolio',
-      icon: '/xp/icons/ie.png',
-      isOpen: true,
-      isMinimized: false,
-      isMaximized: false,
-      x: 60,
-      y: 30,
-      width: 980,
-      height: 600,
-      zIndex: 10,
-      component: 'ie',
-      props: { initialTab: 'projects' }
+  // Windows manager state - adaptive responsive default
+  const [windows, setWindows] = useState(() => {
+    const isMobile = typeof window !== 'undefined' ? window.innerWidth < 768 : false
+    return {
+      ie: {
+        id: 'ie',
+        title: 'Portfolio Projects - HaroldOS Explorer',
+        icon: '/xp/icons/ie.png',
+        isOpen: true,
+        isMinimized: false,
+        isMaximized: isMobile,
+        x: isMobile ? 8 : (embedded ? 24 : 48),
+        y: isMobile ? 8 : (embedded ? 18 : 28),
+        width: isMobile ? 340 : (embedded ? 760 : 860),
+        height: isMobile ? 400 : (embedded ? 460 : 520),
+        zIndex: 10,
+        component: 'ie',
+        props: { initialTab: 'projects' }
+      }
     }
   })
 
@@ -133,8 +124,10 @@ export default function RetroPC({ onSwitchToClassic }) {
     }
 
     if (iconDragRef.current.moved) {
-      const maxX = Math.max(10, window.innerWidth - 85)
-      const maxY = Math.max(10, window.innerHeight - 100)
+      const containerW = containerRef.current?.clientWidth || window.innerWidth
+      const containerH = containerRef.current?.clientHeight || window.innerHeight
+      const maxX = Math.max(10, containerW - 85)
+      const maxY = Math.max(10, containerH - 100)
       const nextX = Math.max(10, Math.min(maxX, initX + dx))
       const nextY = Math.max(10, Math.min(maxY, initY + dy))
 
@@ -155,6 +148,8 @@ export default function RetroPC({ onSwitchToClassic }) {
     } else {
       if (action === 'switch') {
         handleSwitchToClassicClick()
+      } else if (typeof window !== 'undefined' && window.innerWidth < 768) {
+        handleDesktopIconDblClick(action)
       }
     }
   }
@@ -180,11 +175,13 @@ export default function RetroPC({ onSwitchToClassic }) {
     return () => clearInterval(interval)
   }, [])
 
-  // Lock document scroll
+  // Lock document scroll ONLY in standalone fullscreen mode
   useEffect(() => {
-    document.documentElement.classList.add('pc-lock')
-    return () => document.documentElement.classList.remove('pc-lock')
-  }, [])
+    if (!embedded) {
+      document.documentElement.classList.add('pc-lock')
+      return () => document.documentElement.classList.remove('pc-lock')
+    }
+  }, [embedded])
 
   const bringToFront = useCallback((id) => {
     zIndexCounter.current += 1
@@ -213,9 +210,11 @@ export default function RetroPC({ onSwitchToClassic }) {
         }
       }
       const isMobile = window.innerWidth < 768
-      const winW = isMobile ? window.innerWidth : Math.min(config.width || 800, window.innerWidth - 30)
-      const winH = isMobile ? window.innerHeight - 36 : Math.min(config.height || 540, window.innerHeight - 60)
-      const offset = Object.keys(prev).filter(k => prev[k].isOpen).length * 28
+      const maxW = containerRef.current?.clientWidth || window.innerWidth
+      const maxH = containerRef.current?.clientHeight || window.innerHeight
+      const winW = isMobile ? Math.min(maxW - 16, 420) : Math.min(config.width || 760, maxW - 32)
+      const winH = isMobile ? Math.min(maxH - 44, 460) : Math.min(config.height || 480, maxH - 48)
+      const offset = (Object.keys(prev).filter(k => prev[k].isOpen).length % 6) * 22
 
       return {
         ...prev,
@@ -226,8 +225,8 @@ export default function RetroPC({ onSwitchToClassic }) {
           isOpen: true,
           isMinimized: false,
           isMaximized: isMobile,
-          x: isMobile ? 0 : Math.max(20, Math.min(60 + offset, window.innerWidth - winW - 20)),
-          y: isMobile ? 0 : Math.max(20, Math.min(30 + offset, window.innerHeight - winH - 50)),
+          x: isMobile ? 8 : Math.max(16, Math.min(32 + offset, maxW - winW - 16)),
+          y: isMobile ? 8 : Math.max(16, Math.min(20 + offset, maxH - winH - 44)),
           width: winW,
           height: winH,
           zIndex: nextZ,
@@ -543,19 +542,21 @@ export default function RetroPC({ onSwitchToClassic }) {
 
   return (
     <div
-      className="xp-os-root"
+      ref={containerRef}
+      className={`xp-os-root ${embedded ? 'is-embedded' : ''}`}
       onContextMenu={handleContextMenu}
       onClick={() => {
         setContextMenu(null)
         if (startMenuOpen) setStartMenuOpen(false)
       }}
     >
+
       {/* Desktop Background Area */}
       <div
         className="xp-desktop-canvas"
         style={{
           backgroundImage: currentWallpaper?.src ? `url(${currentWallpaper.src})` : 'none',
-          backgroundColor: currentWallpaper?.color || '#004e98'
+          backgroundColor: currentWallpaper?.color || '#0a0a0f'
         }}
       >
         {/* Desktop Icons - Draggable & Movable by the User */}
@@ -566,7 +567,7 @@ export default function RetroPC({ onSwitchToClassic }) {
             return (
               <div
                 key={icon.id}
-                className={`xp-desktop-icon draggable ${isSelected ? 'selected' : ''} ${isSwitch && switchClicks > 0 ? 'pulse' : ''}`}
+                className={`xp-desktop-icon draggable ${isSelected ? 'selected' : ''}`}
                 style={{
                   position: 'absolute',
                   left: `${icon.x}px`,
@@ -578,16 +579,7 @@ export default function RetroPC({ onSwitchToClassic }) {
                 onDoubleClick={() => handleDesktopIconDblClick(icon.action)}
                 title={icon.title}
               >
-                {isSwitch ? (
-                  <div className="xp-switch-badge-wrap">
-                    <img src={icon.icon} alt={icon.title} />
-                    <span className={`xp-click-counter-badge ${switchClicks > 0 ? 'active' : ''}`}>
-                      {switchClicks === 0 ? '3x' : `${switchClicks}/3`}
-                    </span>
-                  </div>
-                ) : (
-                  <img src={icon.icon} alt={icon.title} />
-                )}
+                <img src={icon.icon} alt={icon.title} />
                 <span>{icon.title}</span>
               </div>
             )
@@ -827,15 +819,14 @@ export default function RetroPC({ onSwitchToClassic }) {
               <div
                 className="xp-start-item pinned xp-start-switch-highlight"
                 onClick={() => { setStartMenuOpen(false); handleSwitchToClassicClick() }}
-                title="Click 3 times to switch to Modern Web View"
+                title="Return to Modern Portfolio"
               >
                 <div className="xp-switch-start-icon-wrap">
                   <img src="/xp/icons/earth.png" alt="" className="xp-start-ico" />
-                  <span className="xp-start-badge">{switchClicks > 0 ? `${switchClicks}/3` : '3x'}</span>
                 </div>
                 <div className="xp-start-text">
-                  <strong>Switch to Web Portfolio</strong>
-                  <span>{switchClicks === 0 ? 'Click 3 times to switch' : `Clicked ${switchClicks}/3 times`}</span>
+                  <strong>Return to Portfolio</strong>
+                  <span>Switch back to modern web view</span>
                 </div>
               </div>
 
@@ -1069,14 +1060,23 @@ export default function RetroPC({ onSwitchToClassic }) {
         {/* System Tray */}
         <div className="xp-system-tray">
           <div className="xp-tray-icons">
+            {embedded && onExpandFullscreen && (
+              <button
+                type="button"
+                className="xp-tray-web-toggle"
+                onClick={onExpandFullscreen}
+                title="Expand to Fullscreen Experience"
+              >
+                <span>⛶ FULLSCREEN</span>
+              </button>
+            )}
             <button
               type="button"
               className="xp-tray-web-toggle"
               onClick={handleSwitchToClassicClick}
-              title={`Switch to Web Portfolio (${switchClicks}/3 clicks)`}
+              title="Return to Modern Portfolio"
             >
-              <span>WEB</span>
-              <span className="xp-tray-counter">{switchClicks > 0 ? `${switchClicks}/3` : '3x'}</span>
+              <span>← PORTFOLIO</span>
             </button>
             <img src="/xp/icons/earth.png" alt="" className="xp-tray-ico-img" title="Local Area Connection: Connected" />
             <img src="/xp/icons/winamp.png" alt="" className="xp-tray-ico-img" title="Audio Device: Active" />
