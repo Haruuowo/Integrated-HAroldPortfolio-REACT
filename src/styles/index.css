@@ -1129,30 +1129,111 @@ body.nav-open {
 }
 
 @media (max-width: 960px) {
-  .hero-container {
-    grid-template-columns: 1fr;
-    gap: 40px;
+  #hero {
+    min-height: auto;
+    padding: 92px 20px 48px;
+    justify-content: flex-start;
   }
-  .hero-portrait {
-    width: min(100%, 280px);
+
+  .hero-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 520px;
     margin: 0 auto;
   }
+
+  .hero-left {
+    display: contents;
+  }
+
+  .hero-right {
+    display: contents;
+  }
+
+  .hero-eyebrow {
+    order: 1;
+    justify-content: center;
+    margin-bottom: 8px;
+    font-size: 0.72rem;
+  }
+
+  #hero h1 {
+    order: 2;
+    text-align: center;
+    font-size: clamp(2rem, 7vw, 2.7rem);
+    margin-bottom: 12px;
+  }
+
+  .hero-portrait {
+    order: 3;
+    width: min(100%, 190px);
+    margin: 6px auto 14px;
+  }
+
   .hero-portrait::before {
-    inset: 10px -8px -8px 8px;
+    display: none;
   }
-  .hero-chip {
-    padding: 6px 12px;
+
+  .hero-portrait-frame {
+    aspect-ratio: 4 / 5;
+    border-radius: 24px;
+    border: 1.5px solid var(--bdgold);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 24px rgba(232, 217, 184, 0.16);
   }
-  .hero-chip-label {
-    font-size: 0.58rem;
+
+  .hero-sub {
+    order: 4;
+    text-align: center;
+    font-size: 0.96rem;
+    line-height: 1.65;
+    max-width: 440px;
+    margin: 0 auto 16px;
   }
-  .hero-chip-value {
-    font-size: 0.78rem;
+
+  .hero-focus {
+    order: 5;
+    justify-content: center;
+    gap: 8px;
+    margin: 0 auto 20px;
   }
-  .hero-chip-a { top: 4%; left: -6px; }
-  .hero-chip-b { bottom: 20%; right: -6px; }
-  .hero-chip-c { bottom: 4%; left: -2px; }
-  .hero-scroll { display: none; }
+
+  .hero-focus li {
+    font-size: 0.74rem;
+    padding: 5px 12px;
+  }
+
+  .hero-row {
+    order: 6;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    margin: 0 auto 18px;
+  }
+
+  .hero-row .interactive-hover-btn,
+  .btn-solid,
+  .btn-line {
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .hero-socials {
+    order: 7;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .hero-scroll {
+    display: none;
+  }
 }
 
 .btn-solid {
@@ -3509,23 +3590,8 @@ footer span {
 }
 
 @media (max-width: 500px) {
-  .hero-row {
-    flex-direction: column;
-    width: 100%;
-    align-items: stretch;
-  }
-
-  .hero-row .interactive-hover-btn,
-  .btn-solid,
-  .btn-line {
-    width: 100%;
-    max-width: 320px;
-    text-align: center;
-    margin: 0 auto;
-  }
-
   #hero h1 {
-    font-size: clamp(1.75rem, 6.5vw, 2.2rem);
+    font-size: clamp(1.85rem, 6.5vw, 2.3rem);
   }
 
   .hero-eyebrow {
@@ -3538,14 +3604,6 @@ footer span {
   .hero-eyebrow-line {
     width: 22px;
   }
-
-  .hero-portrait {
-    width: min(100%, 250px);
-  }
-
-  .hero-chip-a { left: 0; }
-  .hero-chip-b { right: 0; }
-  .hero-chip-c { left: 0; }
 
   .mobile-nav {
     width: 100%;
