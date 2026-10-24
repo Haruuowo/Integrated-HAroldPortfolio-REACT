@@ -67,8 +67,7 @@ export default function About() {
 
           <div className="about-copy">
             <p className="story-lead">
-              I'm Harold — I turn imaginative technical ideas into working software that
-              delivers genuine utility.
+              I’m Harold. I build things I’d actually want to use.
             </p>
             <p className="story-body">
               My work spans fully autonomous AI streamers powered by custom LLM brains and

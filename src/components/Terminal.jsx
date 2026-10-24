@@ -239,7 +239,7 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
               <p style={{ color: 'var(--gold)', marginBottom: '4px' }}>CONTACT DETAILS:</p>
               <p>Email: <a href="mailto:harolddoton@gmail.com" style={{ color: 'var(--white)', textDecoration: 'underline' }}>harolddoton@gmail.com</a></p>
               <p>GitHub: <a href="https://github.com/Haruuowo" target="_blank" rel="noreferrer" style={{ color: 'var(--white)', textDecoration: 'underline' }}>github.com/Haruuowo</a></p>
-              <p>LinkedIn: <a href="https://www.linkedin.com/in/harold-doton-606b18317/" target="_blank" rel="noreferrer" style={{ color: 'var(--white)', textDecoration: 'underline' }}>linkedin.com/in/harold-doton</a></p>
+              <p>LinkedIn: <a href="https://www.linkedin.com/in/harolddoton" target="_blank" rel="noreferrer" style={{ color: 'var(--white)', textDecoration: 'underline' }}>linkedin.com/in/harolddoton</a></p>
             </div>
           )
         })

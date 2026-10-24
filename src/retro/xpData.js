@@ -88,7 +88,7 @@ Computer Science Student & Software Engineer
 Holy Angel University · Pampanga, Philippines
 Contact: harolddoton@gmail.com
 GitHub:  https://github.com/Haruuowo
-LinkedIn: https://linkedin.com/in/harold-doton-606b18317
+LinkedIn: https://www.linkedin.com/in/harolddoton
 
 ABOUT ME:
 --------------------------------------------------

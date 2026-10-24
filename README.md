@@ -158,7 +158,7 @@ my-portfolio/
 * **Institution**: Holy Angel University — BS Computer Science
 * **Role**: Lead Organizer / Internal Relations — Google Developer Groups (GDG) on Campus HAU
 * **GitHub**: [@Haruuowo](https://github.com/Haruuowo)
-* **LinkedIn**: [linkedin.com/in/harold-doton-606b18317](https://linkedin.com/in/harold-doton-606b18317)
+* **LinkedIn**: [linkedin.com/in/harolddoton](https://www.linkedin.com/in/harolddoton)
 * **Email**: [harolddoton@gmail.com](mailto:harolddoton@gmail.com)
 
 ---

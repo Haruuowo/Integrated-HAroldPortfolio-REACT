@@ -7,7 +7,7 @@ export const PERSONAL_INFO = {
   email: 'harolddoton@gmail.com',
   phone: '0936-029-6134',
   linkedin: 'linkedin.com/in/harolddoton',
-  linkedinUrl: 'https://linkedin.com/in/harolddoton',
+  linkedinUrl: 'https://www.linkedin.com/in/harolddoton',
   github: 'github.com/Haruuowo',
   githubUrl: 'https://github.com/Haruuowo',
   portfolio: 'haroldportfolio.vercel.app',

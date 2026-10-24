@@ -95,7 +95,7 @@ export const EXPERIENCE = [
 export const CONTACT_LINKS = [
   { label: 'Email', value: 'harolddoton@gmail.com', href: 'mailto:harolddoton@gmail.com' },
   { label: 'GitHub', value: 'github.com/Haruuowo', href: 'https://github.com/Haruuowo' },
-  { label: 'LinkedIn', value: 'linkedin.com/in/harold-doton-606b18317', href: 'https://linkedin.com/in/harold-doton-606b18317' },
+  { label: 'LinkedIn', value: 'linkedin.com/in/harolddoton', href: 'https://www.linkedin.com/in/harolddoton' },
   { label: 'Discord', value: 'kairuuowo', href: null },
 ]
 
