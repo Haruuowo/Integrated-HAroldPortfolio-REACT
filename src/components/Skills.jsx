@@ -65,7 +65,7 @@ const cloudOptions = {
 /* ─── Sphere sub-component (Magic UI react-icon-cloud) ─────────── */
 function SkillsSphere() {
   return (
-    <div className="sphere-scene" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '360px' }}>
+    <div className="sphere-scene" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Cloud options={cloudOptions}>
         {ALL_SKILLS.map((skill) => (
           <a
@@ -157,14 +157,6 @@ const SKILL_CATS = ['Languages', 'Tools', 'AI & ML', 'Frameworks', 'Design', 'Da
 
 export default function Skills() {
   const [activeTab, setActiveTab] = useState('skills')
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    // Detect touch/coarse pointer device once on mount
-    const coarse = window.matchMedia('(pointer: coarse)').matches
-    const narrow = window.innerWidth < 768
-    setIsMobile(coarse || narrow)
-  }, [])
 
   return (
     <section id="skills">
@@ -198,8 +190,8 @@ export default function Skills() {
               </button>
             ))}
           </div>
-          {activeTab === 'skills' && !isMobile && (
-            <span className="sec-note">drag to spin · hover to slow</span>
+          {activeTab === 'skills' && (
+            <span className="sec-note">drag to spin · tap or hover icons</span>
           )}
         </div>
 
@@ -207,12 +199,10 @@ export default function Skills() {
         <div className="sk-content" key={activeTab}>
           {activeTab === 'skills' && (
             <div className="skills-container with-sphere">
-              {!isMobile && (
-                <div className="skills-sphere-wrapper" style={{ flexDirection: 'column', gap: '12px' }}>
-                  <SkillsSphere />
-                  <span className="sphere-hint-sub">Interactive 3D Tech Cloud</span>
-                </div>
-              )}
+              <div className="skills-sphere-wrapper" style={{ flexDirection: 'column', gap: '12px' }}>
+                <SkillsSphere />
+                <span className="sphere-hint-sub">Interactive 3D Tech Cloud</span>
+              </div>
               <div className="skills-list-wrapper visible">
                 <div className="skills-cat-list">
                   {/* Left Column */}
