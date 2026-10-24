@@ -70,10 +70,7 @@ export default function About() {
               I’m Harold. I build things I’d actually want to use.
             </p>
             <p className="story-body">
-              My work spans fully autonomous AI streamers powered by custom LLM brains and
-              real-time voice synthesis, to responsive web dashboards for student developer
-              communities. I like the boundary where artificial intelligence meets clean human
-              interfaces — shipping code that is performant, practical, and fun.
+              I’m a 4th-year CS student who does backend, AI, and whatever else the idea needs. I’ve built an offline voice-controlled app that doesn’t need the internet to understand you, a file organizer that cleans up your digital mess so you don’t have to, and a vault for city pop obsessives, because apparently I needed a database for my music taste. My side projects usually start as “this should take a weekend” and somehow end up with a schema, a dark mode, and a changelog. I like clean interfaces, solid backends, and shipping things that actually work. Currently looking for the next thing to over-engineer.
             </p>
 
             <dl className="about-facts">
