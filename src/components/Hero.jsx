@@ -106,19 +106,6 @@ export default function Hero() {
                 onError={(e) => { e.currentTarget.style.display = 'none' }}
               />
             </div>
-
-            <div className="hero-chip hero-chip-a">
-              <span className="hero-chip-label">Currently building</span>
-              <span className="hero-chip-value">Luna AI Vtuber</span>
-            </div>
-            <div className="hero-chip hero-chip-b">
-              <span className="hero-chip-label">Studying</span>
-              <span className="hero-chip-value">BS Computer Science</span>
-            </div>
-            <div className="hero-chip hero-chip-c">
-              <span className="hero-chip-label">Leading</span>
-              <span className="hero-chip-value">GDG on Campus · HAU</span>
-            </div>
           </div>
         </div>
       </div>
