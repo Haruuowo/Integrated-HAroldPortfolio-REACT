@@ -3,27 +3,25 @@ import { useEffect, useRef, useState } from 'react'
 const EDUCATION = [
   {
     title: 'Bachelor of Science in Computer Science',
-    company: 'Holy Angel University',
-    date: 'January 2025 — Present',
+    company: 'Holy Angel University · School of Computing',
+    date: 'Expected 2025',
     logo: '/assets/hau.png',
-    desc: 'Undergraduate study focused on artificial intelligence, systems software, and modern software engineering principles.',
+    desc: 'Undergraduate study focused on artificial intelligence, algorithmic design, and software engineering.',
     bullets: [
-      'Focusing on artificial intelligence, algorithmic design, and full-stack software development.',
-      'Active member in campus technical communities and student development circles.',
+      'Relevant Coursework: Data Structures & Algorithms, Machine Learning, Mobile Development, Software Engineering',
     ],
   },
 ]
 
 const EXPERIENCE_ITEMS = [
   {
-    title: 'Internal Relations Officer',
-    company: 'Google Developer Groups on Campus · HAU',
-    date: 'July 2024 — April 2025',
+    title: 'Internal Officer',
+    company: 'Google Developer Group (GDG) HAU',
+    date: '2024 — Present',
     logo: '/assets/gdg.jpg',
-    desc: 'Coordinated communications and cross-functional collaboration within the student developer organization.',
+    desc: 'Spearheaded technical workshops and coordinated community hackathons, facilitating hands-on learning for 100+ student developers in cloud and mobile technologies.',
     bullets: [
-      'Facilitated inter-team communication and alignment for campus-wide tech workshops and dev sessions.',
-      'Assisted in planning and executing hackathons, tech talks, and Google Developer technologies showcases.',
+      'Spearheaded technical workshops and coordinated community hackathons, facilitating hands-on learning for 100+ student developers in cloud and mobile technologies.',
     ],
   },
 ]
