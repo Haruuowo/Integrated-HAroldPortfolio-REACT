@@ -24,10 +24,11 @@ export const TECHNICAL_SKILLS = {
     'scikit-learn',
   ],
   mobile: ['Android (Accessibility Service API)', 'Kotlin'],
-  web: ['HTML', 'CSS', 'JavaScript', 'React', 'Node.js', 'REST APIs'],
+  web: ['HTML', 'CSS', 'JavaScript', 'React', 'Node.js', 'REST APIs', 'Supabase'],
   tools_platforms: [
     'Git',
     'GitHub',
+    'Supabase',
     'Google Colab',
     'Node.js',
     'LibreOffice',

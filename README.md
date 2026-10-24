@@ -31,7 +31,7 @@ This repository houses the personal portfolio of John Harold Doton. The applicat
 
 ### Interactive 3D Tech Cloud Sphere
 * Powered by `react-icon-cloud` (TagCanvas) on HTML5 Canvas.
-* Renders interactive rotating technology nodes (`Python`, `React`, `PyTorch`, `AWS`, `Flutter`, `PostgreSQL`, `Docker`, `OpenAI`).
+* Renders interactive rotating technology nodes (`Python`, `React`, `PyTorch`, `AWS`, `Flutter`, `Supabase`, `PostgreSQL`, `REST APIs`, `OpenAI`).
 * Fully touch-enabled (`touch-action: pan-y`) and responsively scaled for fluid dragging on both mobile and desktop.
 
 ### Interactive Developer Terminal Shell

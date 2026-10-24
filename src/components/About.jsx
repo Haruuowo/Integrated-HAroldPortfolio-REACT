@@ -28,7 +28,8 @@ const TAGS = [
   'Full-Stack Web',
   'Autonomous Agents',
   'Computer Vision',
-  'REST APIs'
+  'REST APIs',
+  'Supabase',
 ]
 
 export default function About() {

@@ -16,10 +16,12 @@ export const ALL_SKILLS = [
   { name: 'Firebase',       cat: 'Databases',  icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg',                                                                    years: '1.5 yrs' },
   { name: 'MySQL',          cat: 'Databases',  icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg',                                                                       years: '1.5 yrs' },
   { name: 'PostgreSQL',     cat: 'Databases',  icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',                                                             years: '1 yr' },
+  { name: 'Supabase',       cat: 'Databases',  icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/supabase/supabase-original.svg',                                                                 years: '1 yr' },
   // Tools & DevOps
   { name: 'Android Studio', cat: 'Tools',      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/androidstudio/androidstudio-original.svg',                                                       years: '1 yr' },
   { name: 'AWS',            cat: 'Tools',      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',                                       years: '1 yr' },
   { name: 'Git & GitHub',   cat: 'Tools',      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',                                                                           years: '3 yrs' },
+  { name: 'REST APIs',      cat: 'Tools',      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',                                                                     years: '2 yrs' },
   { name: 'VS Code',        cat: 'Tools',      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg',                                                                     years: '3 yrs' },
   // AI & ML
   { name: 'PyTorch',        cat: 'AI & ML',    icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',                                                                   years: '1 yr' },
