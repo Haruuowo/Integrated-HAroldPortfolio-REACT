@@ -12,7 +12,7 @@ const CURATED_REPO_KEYS = [
 export default function Work() {
   const sectionRef = useRef(null)
   const toolbarRef = useRef(null)
-  const [visible, setVisible] = useState(true)
+  const [visible, setVisible] = useState(false)
   const [projects, setProjects] = useState(FALLBACK_PROJECTS)
   const [activeFilter, setActiveFilter] = useState('all')
   const [isExpanded, setIsExpanded] = useState(false)
@@ -146,18 +146,11 @@ export default function Work() {
         {/* Section Header */}
         <div className={`proj-header reveal ${visible ? 'visible' : ''}`}>
           <div className="proj-header-left">
-            <div className="sec-head" style={{ marginBottom: 0 }}>
+            <div className="sec-head sec-head-stack" style={{ marginBottom: '16px' }}>
+              <span className="sec-kicker">03 — Projects</span>
               <h2 className="sec-title">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="sec-title-icon">
-                  <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
-                </svg>
-                Projects
+                {isExpanded ? 'All Repositories.' : 'Featured Works.'}
               </h2>
-              <span className="sec-note">
-                {isExpanded
-                  ? `All Repositories (${projects.length})`
-                  : `Featured Works (${curatedProjects.length})`}
-              </span>
             </div>
             <p className="proj-intro">
               {isExpanded

@@ -33,7 +33,7 @@ const SOCIALS = [
   },
 ]
 
-const FOCUS = ['AI Agents', 'Full-Stack Web', 'Computer Vision']
+const FOCUS = ['Backend Developer', 'AI Agents', 'Full-Stack Web', 'Computer Vision']
 
 export default function Hero() {
   return (
@@ -76,7 +76,7 @@ export default function Hero() {
               download="Harold_Resume.pdf"
               className="btn-red"
             >
-              Download CV
+              Resume
             </InteractiveHoverButton>
           </div>
 

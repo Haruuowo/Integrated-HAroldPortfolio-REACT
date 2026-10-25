@@ -16,7 +16,7 @@ const NAV_LINKS = [
 
 const RESUME_LINK = '/assets/Harold_Resume.pdf'
 
-export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpen, onSwitchToRetro }) {
+export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpen }) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const dropdownRef = useRef(null)
@@ -89,18 +89,6 @@ export default function Header({ theme, setTheme, mobileNavOpen, setMobileNavOpe
       </nav>
 
       <div className="nav-right">
-        {onSwitchToRetro && (
-          <button
-            className="retro-os-toggle-btn"
-            type="button"
-            onClick={onSwitchToRetro}
-            title="Switch to Retro Virtual PC"
-          >
-            <span className="retro-os-btn-dot" />
-            <span>Virtual PC</span>
-          </button>
-        )}
-
         <div className={`theme-dropdown ${dropdownOpen ? 'open' : ''}`} ref={dropdownRef}>
           <button
             className="theme-dd-toggle"

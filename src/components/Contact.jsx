@@ -55,6 +55,7 @@ export default function Contact() {
         <div className="contact-split">
           {/* LEFT */}
           <div className={`contact-left reveal ${visible ? 'visible' : ''}`}>
+            <span className="sec-kicker" style={{ display: 'inline-block', marginBottom: '12px' }}>05 — Contact</span>
             <h2 className="contact-hed">
               Get in touch with <span className="gold-accent">me</span>
             </h2>

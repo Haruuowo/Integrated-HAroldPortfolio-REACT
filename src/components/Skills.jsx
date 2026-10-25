@@ -72,7 +72,7 @@ function SkillsSphere() {
             key={skill.name}
             href="#"
             onClick={(e) => e.preventDefault()}
-            title={`${skill.name} (${skill.years})`}
+            title={skill.years ? `${skill.name} (${skill.years})` : skill.name}
             style={{ display: 'inline-block', padding: '6px' }}
           >
             <img
@@ -153,7 +153,8 @@ const TABS = [
   { id: 'certs', label: 'Certifications', hint: '' },
 ]
 
-const SKILL_CATS = ['Languages', 'Tools', 'AI & ML', 'Frameworks', 'Design', 'Databases']
+const LEFT_CATS = ['Backend & Languages', 'DevOps & Architecture']
+const RIGHT_CATS = ['Frontend & Mobile', 'Databases & Cloud', 'AI / ML']
 
 export default function Skills() {
   const [activeTab, setActiveTab] = useState('skills')
@@ -161,17 +162,12 @@ export default function Skills() {
   return (
     <section id="skills">
       <div className="container">
-        <div className="sec-head">
-          <h2 className="sec-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="sec-title-icon">
-              <polyline points="16 18 22 12 16 6" />
-              <polyline points="8 6 2 12 8 18" />
-            </svg>
-            Skills
-          </h2>
+        <div className="sec-head sec-head-stack reveal" style={{ marginBottom: '32px' }}>
+          <span className="sec-kicker">02 — Skills</span>
+          <h2 className="sec-title">Tech Stack &amp; Tools.</h2>
         </div>
         {/* Section header with tab switcher */}
-        <div className="sk-header">
+        <div className="sk-header reveal">
           <div className="sk-tabs">
             <div
               className="sk-tab-indicator"
@@ -198,7 +194,7 @@ export default function Skills() {
         {/* Panel content — key forces remount → re-triggers fade animation */}
         <div className="sk-content" key={activeTab}>
           {activeTab === 'skills' && (
-            <div className="skills-container with-sphere">
+            <div className="skills-container with-sphere reveal">
               <div className="skills-sphere-wrapper" style={{ flexDirection: 'column', gap: '12px' }}>
                 <SkillsSphere />
                 <span className="sphere-hint-sub">Interactive 3D Tech Cloud</span>
@@ -207,7 +203,7 @@ export default function Skills() {
                 <div className="skills-cat-list">
                   {/* Left Column */}
                   <div className="skills-grid-col">
-                    {['Languages', 'AI & ML', 'Design'].map(cat => {
+                    {LEFT_CATS.map(cat => {
                       const items = ALL_SKILLS.filter(s => s.cat === cat)
                       if (!items.length) return null
                       return (
@@ -215,7 +211,7 @@ export default function Skills() {
                           <span className="skill-cat-label-new">{cat}</span>
                           <div className="skill-cat-pills-wrap">
                             {items.map(skill => (
-                              <div className="skill-tag-pill" key={skill.name} title={`Experience: ${skill.years}`}>
+                              <div className="skill-tag-pill" key={skill.name} title={skill.years ? `Experience: ${skill.years}` : skill.name}>
                                 <img src={skill.icon} alt={skill.name} className="skill-cat-icon" loading="lazy" />
                                 <span>{skill.name}</span>
                               </div>
@@ -228,7 +224,7 @@ export default function Skills() {
 
                   {/* Right Column */}
                   <div className="skills-grid-col">
-                    {['Tools', 'Frameworks', 'Databases'].map(cat => {
+                    {RIGHT_CATS.map(cat => {
                       const items = ALL_SKILLS.filter(s => s.cat === cat)
                       if (!items.length) return null
                       return (
@@ -236,7 +232,7 @@ export default function Skills() {
                           <span className="skill-cat-label-new">{cat}</span>
                           <div className="skill-cat-pills-wrap">
                             {items.map(skill => (
-                              <div className="skill-tag-pill" key={skill.name} title={`Experience: ${skill.years}`}>
+                              <div className="skill-tag-pill" key={skill.name} title={skill.years ? `Experience: ${skill.years}` : skill.name}>
                                 <img src={skill.icon} alt={skill.name} className="skill-cat-icon" loading="lazy" />
                                 <span>{skill.name}</span>
                               </div>

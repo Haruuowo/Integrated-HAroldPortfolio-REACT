@@ -206,7 +206,7 @@ export default function Terminal({ isOpen, onClose, isShifted }) {
               {ALL_SKILLS.map(skill => (
                 <div key={skill.name} style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: '8px', fontSize: '0.78rem' }}>
                   <span style={{ color: 'var(--white)' }}>▸ {skill.name}</span>
-                  <span style={{ color: 'var(--gold)' }}>{skill.years}</span>
+                  <span style={{ color: 'var(--gold)' }}>{skill.years || '—'}</span>
                 </div>
               ))}
             </div>

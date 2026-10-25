@@ -11,9 +11,8 @@ import Experience from '@components/Experience'
 import Contact from '@components/Contact'
 import Footer from '@components/Footer'
 import BackToTop from '@components/BackToTop'
-import ScrollProgress from '@components/ScrollProgress'
 
-export default function ClassicPortfolio({ onSwitchToRetro, onOpenBootScreen }) {
+export default function ClassicPortfolio() {
   const [loading, setLoading] = useState(true)
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark')
@@ -45,21 +44,44 @@ export default function ClassicPortfolio({ onSwitchToRetro, onOpenBootScreen }) 
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    // Subtle scroll reveal observer for all section elements
+    const setupReveal = () => {
+      const targets = document.querySelectorAll('.reveal:not(.visible)')
+      if (!targets.length) return
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible')
+              observer.unobserve(entry.target)
+            }
+          })
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      )
+
+      targets.forEach((el) => observer.observe(el))
+      return observer
+    }
+
+    const timer = setTimeout(setupReveal, 100)
+    return () => clearTimeout(timer)
+  }, [loading])
+
   return (
     <>
-      <ScrollProgress />
       {loading && <Loader />}
       <Header
         theme={theme}
         setTheme={setTheme}
         mobileNavOpen={mobileNavOpen}
         setMobileNavOpen={setMobileNavOpen}
-        onSwitchToRetro={onSwitchToRetro}
       />
       <MobileNav
         isOpen={mobileNavOpen}
         onClose={() => setMobileNavOpen(false)}
-        onSwitchToRetro={onSwitchToRetro}
       />
       <main>
         <Hero />

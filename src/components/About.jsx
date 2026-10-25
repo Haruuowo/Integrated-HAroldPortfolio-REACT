@@ -23,6 +23,7 @@ const FACTS = [
 ]
 
 const TAGS = [
+  'Backend Development',
   'Artificial Intelligence',
   'Software Engineering',
   'Full-Stack Web',
@@ -44,12 +45,12 @@ export default function About() {
   return (
     <section id="about">
       <div className="container">
-        <div className="sec-head sec-head-stack">
+        <div className="sec-head sec-head-stack reveal">
           <span className="sec-kicker">01 — About</span>
           <h2 className="sec-title">A student who ships.</h2>
         </div>
 
-        <div className="about-layout">
+        <div className="about-layout reveal">
           <figure className="about-photo">
             <div className="about-photo-frame">
               <img
@@ -61,7 +62,7 @@ export default function About() {
             </div>
             <figcaption>
               <strong>John Harold Doton</strong>
-              <span>Computer Science Student &amp; Developer</span>
+              <span>Backend Developer &amp; CS Student</span>
             </figcaption>
           </figure>
 
@@ -105,7 +106,7 @@ export default function About() {
 
         <ol className="pillars-list">
           {PILLARS.map((p, idx) => (
-            <li className="pillar" key={p.title}>
+            <li className={`pillar reveal reveal-delay-${(idx % 3) + 1}`} key={p.title}>
               <span className="pillar-num">{String(idx + 1).padStart(2, '0')}</span>
               <h3 className="pillar-title">{p.title}</h3>
               <p className="pillar-desc">{p.desc}</p>
